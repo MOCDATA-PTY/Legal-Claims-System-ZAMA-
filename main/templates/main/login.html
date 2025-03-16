@@ -20,6 +20,8 @@
             --border-radius: 12px;
             --box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
             --transition: all 0.3s ease;
+            --danger: #E53E3E;
+            --success: #38A169;
         }
 
         * {
@@ -171,6 +173,45 @@
             color: #A0AEC0;
         }
 
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            z-index: 5;
+        }
+
+        .password-toggle:hover {
+            color: var(--primary);
+        }
+
+        .password-strength-meter {
+            height: 5px;
+            width: 100%;
+            background-color: #E2E8F0;
+            border-radius: 3px;
+            margin-top: 8px;
+            overflow: hidden;
+            display: none;
+        }
+
+        .password-strength-meter .progress {
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .password-strength-text {
+            font-size: 0.8rem;
+            margin-top: 5px;
+            text-align: right;
+            display: none;
+        }
+
         .btn {
             display: inline-block;
             width: 100%;
@@ -202,6 +243,13 @@
             transform: translateY(0);
         }
 
+        .btn:disabled {
+            background-color: var(--gray);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
         .btn i {
             transition: transform 0.3s ease;
         }
@@ -210,10 +258,20 @@
             transform: translateX(4px);
         }
 
-       
+        .security-info {
+            margin-top: 1.5rem;
+            font-size: 0.85rem;
+            color: var(--gray);
+            text-align: center;
+        }
+
+        .security-info i {
+            color: var(--primary);
+            margin-right: 5px;
+        }
 
         .error-message {
-            color: #E53E3E;
+            color: var(--danger);
             text-align: center;
             margin-bottom: 1.5rem;
             padding: 10px;
@@ -231,6 +289,150 @@
             0%, 100% { transform: translateX(0); }
             20%, 60% { transform: translateX(-5px); }
             40%, 80% { transform: translateX(5px); }
+        }
+
+        .captcha-wrapper {
+            margin-bottom: 1.75rem;
+            border: 1px solid #DDE3E9;
+            border-radius: 10px;
+            padding: 15px;
+            background-color: #F8FAFC;
+        }
+
+        .captcha-title {
+            font-size: 0.9rem;
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+        }
+
+        .captcha-challenge {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .captcha-image {
+            background-color: #E2E8F0;
+            width: 150px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            letter-spacing: 2px;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .captcha-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 49%, #DDE3E9 49%, #DDE3E9 51%, transparent 51%);
+            background-size: 6px 6px;
+            opacity: 0.5;
+        }
+
+        .refresh-captcha {
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+
+        .captcha-input {
+            width: 100%;
+            height: 40px;
+            border: 1px solid #DDE3E9;
+            border-radius: 5px;
+            padding: 0 10px;
+            font-size: 1rem;
+        }
+
+        .login-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.75rem;
+        }
+
+        .forgot-password {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .forgot-password:hover {
+            color: var(--primary-light);
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+        }
+
+        .checkbox-wrapper input[type="checkbox"] {
+            margin-right: 8px;
+        }
+
+        .checkbox-wrapper label {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .lockout-timer {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 1rem;
+            color: var(--danger);
+            font-weight: 500;
+            display: none;
+        }
+
+        .lockout-timer.active {
+            display: block;
+        }
+
+        .timer-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px auto;
+            background-color: #FEF2F2;
+            color: var(--danger);
+            font-weight: bold;
+            font-size: 1.25rem;
+            border: 2px solid var(--danger);
+            position: relative;
+        }
+
+        .timer-circle::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 50%;
+            border: 3px solid var(--danger);
+            clip: rect(0, 30px, 60px, 0);
+            transform: rotate(90deg);
+            animation: countdown 30s linear forwards;
+        }
+
+        @keyframes countdown {
+            from { transform: rotate(90deg); }
+            to { transform: rotate(450deg); }
         }
 
         /* Responsive adjustments */
@@ -287,8 +489,29 @@
                 color: #64748B;
             }
             
-            .remember-me {
+            .captcha-wrapper {
+                background-color: #2D3748;
+                border-color: #475569;
+            }
+            
+            .captcha-image {
+                background-color: #4A5568;
                 color: #E2E8F0;
+            }
+            
+            .captcha-input {
+                background-color: #1E293B;
+                border-color: #475569;
+                color: #F0F4F8;
+            }
+
+            .security-info, .checkbox-wrapper label {
+                color: #A0AEC0;
+            }
+            
+            .timer-circle {
+                background-color: #2D3748;
+                border-color: var(--danger);
             }
         }
 
@@ -312,43 +535,358 @@
                 <div class="login-header">
                     <h3 class="login-title">Legal Claims System</h3>
                     <p style="color: var(--gray);">Please sign in to continue</p>
-                </div>
+</div>
 
-                <!-- Display error message if authentication fails -->
-                {% if form.errors %}
-                <div class="error-message active">
-                    <i class="fas fa-exclamation-circle"></i> Invalid username or password. Please try again.
-                </div>
-                {% endif %}
+<!-- Display error message if authentication fails -->
+{% if form.errors %}
+<div class="error-message active">
+    <i class="fas fa-exclamation-circle"></i> Invalid username or password. Please try again.
+</div>
+{% endif %}
 
-                <form method="post" action="{% url 'login' %}" autocomplete="off">
-                    {% csrf_token %}
-                    
-                    <div class="form-group">
-                        <label for="username" class="form-label">Username</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-user"></i></span>
-                            <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username" required>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="password" class="form-label">Password</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                            <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
-                        </div>
-                    </div>
-                    
-               
-                    
-                    <input type="hidden" name="next" value="{{ request.GET.next }}">
-                    <button type="submit" class="btn">
-                        Sign In <i class="fas fa-arrow-right"></i>
-                    </button>
-                </form>
-            </div>
+<!-- Display login attempt message if too many failed attempts -->
+<div class="error-message" id="attempts-error">
+    <i class="fas fa-exclamation-triangle"></i> Too many failed login attempts. Please wait.
+</div>
+
+<!-- Lockout timer display -->
+<div class="lockout-timer" id="lockout-timer">
+    <p>Account temporarily locked</p>
+    <div class="timer-circle" id="timer-countdown">30</div>
+    <p>Please wait before trying again</p>
+</div>
+
+<form method="post" action="{% url 'login' %}" autocomplete="off" id="login-form">
+    {% csrf_token %}
+    
+    <div class="form-group">
+        <label for="username" class="form-label">Username</label>
+        <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-user"></i></span>
+            <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username" required>
         </div>
     </div>
-</body>
-</html>
+    
+    <div class="form-group">
+        <label for="password" class="form-label">Password</label>
+        <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
+            <button type="button" class="password-toggle" id="password-toggle" aria-label="Toggle password visibility">
+                <i class="fas fa-eye"></i>
+            </button>
+        </div>
+        <div class="password-strength-meter">
+            <div class="progress" id="password-strength-progress"></div>
+        </div>
+        <div class="password-strength-text" id="password-strength-text"></div>
+    </div>
+    
+    <div class="captcha-wrapper" id="captcha-container">
+        <p class="captcha-title"><i class="fas fa-shield-alt"></i> Security Verification</p>
+        <div class="captcha-challenge">
+            <div class="captcha-image" id="captcha-image">ABC123</div>
+            <button type="button" class="refresh-captcha" id="refresh-captcha">
+                <i class="fas fa-sync-alt"></i>
+            </button>
+        </div>
+        <input type="text" class="captcha-input" id="captcha-input" name="captcha" placeholder="Enter the code above" required>
+        <input type="hidden" id="captcha-token" name="captcha_token" value="">
+    </div>
+    
+    <input type="hidden" name="next" value="{{ request.GET.next }}">
+    <button type="submit" class="btn" id="login-button">
+        Sign In <i class="fas fa-arrow-right"></i>
+    </button>
+    
+    <div class="security-info">
+        <i class="fas fa-lock"></i> Secured by SSL encryption. All data is protected.
+    </div>
+    
+    <script>
+        // Toggle password visibility
+        document.getElementById('password-toggle').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const icon = this.querySelector('i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+        
+        // Generate random captcha
+        function generateCaptcha() {
+            const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            let captcha = '';
+            for (let i = 0; i < 6; i++) {
+                captcha += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            document.getElementById('captcha-image').textContent = captcha;
+            document.getElementById('captcha-token').value = btoa(captcha); // Simple encoding
+            return captcha;
+        }
+        
+        // Refresh captcha on button click
+        document.getElementById('refresh-captcha').addEventListener('click', function() {
+            generateCaptcha();
+        });
+        
+        // Generate initial captcha on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            generateCaptcha();
+            
+            // Form elements
+            const form = document.getElementById('login-form');
+            const loginButton = document.getElementById('login-button');
+            const attemptsError = document.getElementById('attempts-error');
+            const lockoutTimer = document.getElementById('lockout-timer');
+            const timerCountdown = document.getElementById('timer-countdown');
+            
+            // Login attempts tracking
+            const MAX_ATTEMPTS = 3;
+            const LOCKOUT_TIME = 30; // seconds
+            
+            // Get stored attempts or initialize
+            let loginAttempts = parseInt(localStorage.getItem('loginAttempts') || '0');
+            let isLocked = localStorage.getItem('isLocked') === 'true';
+            let lockExpiration = parseInt(localStorage.getItem('lockExpiration') || '0');
+            
+            // Check if there's an active lockout
+            function checkLockStatus() {
+                const currentTime = new Date().getTime();
+                
+                // If lockout is active
+                if (isLocked) {
+                    if (currentTime < lockExpiration) {
+                        // Still locked - calculate remaining time
+                        const remainingTime = Math.ceil((lockExpiration - currentTime) / 1000);
+                        
+                        // Enable lockout mode UI
+                        enableLockoutMode(remainingTime);
+                    } else {
+                        // Lockout period is over, reset
+                        resetLockout();
+                    }
+                } else if (loginAttempts >= MAX_ATTEMPTS) {
+                    // Max attempts reached - initiate lockout
+                    initiateLockout();
+                }
+            }
+            
+            // Reset lockout state
+            function resetLockout() {
+                localStorage.setItem('loginAttempts', '0');
+                localStorage.setItem('isLocked', 'false');
+                localStorage.removeItem('lockExpiration');
+                
+                // Reset UI
+                loginAttempts = 0;
+                isLocked = false;
+                
+                // Enable form
+                enableForm();
+                
+                // Hide lockout elements
+                attemptsError.classList.remove('active');
+                lockoutTimer.classList.remove('active');
+            }
+            
+            // Initiate a new lockout
+            function initiateLockout() {
+                // Set lockout state
+                isLocked = true;
+                const expirationTime = new Date().getTime() + (LOCKOUT_TIME * 1000);
+                
+                // Save to localStorage
+                localStorage.setItem('isLocked', 'true');
+                localStorage.setItem('lockExpiration', expirationTime.toString());
+                
+                // Enable lockout UI
+                enableLockoutMode(LOCKOUT_TIME);
+            }
+            
+            // Enable lockout mode UI
+            function enableLockoutMode(remainingSeconds) {
+                // Disable form
+                disableForm();
+                
+                // Show lockout message
+                attemptsError.classList.add('active');
+                lockoutTimer.classList.add('active');
+                
+                // Start countdown
+                startCountdown(remainingSeconds);
+            }
+            
+            // Start countdown timer
+            function startCountdown(seconds) {
+                timerCountdown.textContent = seconds;
+                
+                // Clear any existing timer
+                if (window.countdownInterval) {
+                    clearInterval(window.countdownInterval);
+                }
+                
+                // Start new timer
+                window.countdownInterval = setInterval(() => {
+                    seconds--;
+                    timerCountdown.textContent = seconds;
+                    
+                    if (seconds <= 0) {
+                        clearInterval(window.countdownInterval);
+                        resetLockout();
+                    }
+                }, 1000);
+            }
+            
+            // Disable form inputs and button
+            function disableForm() {
+                document.getElementById('username').disabled = true;
+                document.getElementById('password').disabled = true;
+                document.getElementById('captcha-input').disabled = true;
+                document.getElementById('refresh-captcha').disabled = true;
+                loginButton.disabled = true;
+            }
+            
+            // Enable form inputs and button
+            function enableForm() {
+                document.getElementById('username').disabled = false;
+                document.getElementById('password').disabled = false;
+                document.getElementById('captcha-input').disabled = false;
+                document.getElementById('refresh-captcha').disabled = false;
+                loginButton.disabled = false;
+            }
+            
+            // Increment attempt counter
+            function incrementAttempts() {
+                loginAttempts++;
+                localStorage.setItem('loginAttempts', loginAttempts.toString());
+                
+                // Show warning message if approaching limit
+                if (loginAttempts === MAX_ATTEMPTS - 1) {
+                    showError(`Warning: You have 1 login attempt remaining.`);
+                }
+                
+                // Check if max attempts reached
+                if (loginAttempts >= MAX_ATTEMPTS) {
+                    initiateLockout();
+                }
+            }
+            
+            // Show error message
+            function showError(message) {
+                const errorDiv = document.querySelector('.error-message.active') || attemptsError;
+                errorDiv.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message}`;
+                errorDiv.classList.add('active');
+            }
+            
+            // Form submission handler
+// Form submission handler
+form.addEventListener('submit', function(e) {
+    // Prevent default if locked
+    if (isLocked) {
+        e.preventDefault();
+        return;
+    }
+    
+    e.preventDefault();
+    
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const captchaInput = document.getElementById('captcha-input').value;
+    const captchaToken = document.getElementById('captcha-token').value;
+    
+    // Simple validation
+    if (!username || !password || !captchaInput) {
+        showError('All fields are required');
+        return;
+    }
+    
+    // Validate captcha (simple client-side validation, should be validated server-side too)
+    if (captchaInput !== atob(captchaToken)) {
+        incrementAttempts();
+        showError('Invalid captcha code. Please try again.');
+        generateCaptcha();
+        document.getElementById('captcha-input').value = '';
+        return;
+    }
+    
+    // Remove the hardcoded credential check
+    // Instead, submit the form to the server for authentication
+    // The server will handle the authentication and redirect accordingly
+    
+    // If the form is submitted, we'll count it as an attempt
+    // Server will handle the authentication and redirect on success
+    // On failure, the page will reload with error messages
+    
+    // Submit the form to the server
+    this.submit();
+    
+    // For client-side tracking, we increment the attempt counter
+    // This is fine because success will redirect to a new page
+    // And only failed attempts will return to this page
+    incrementAttempts();
+});           
+            // Basic password strength meter
+            const passwordInput = document.getElementById('password');
+            const strengthMeter = document.querySelector('.password-strength-meter');
+            const strengthProgress = document.getElementById('password-strength-progress');
+            const strengthText = document.getElementById('password-strength-text');
+            
+            passwordInput.addEventListener('input', function() {
+                const password = this.value;
+                if (password) {
+                    strengthMeter.style.display = 'block';
+                    strengthText.style.display = 'block';
+                    
+                    // Calculate password strength (simple version)
+                    const strength = calculatePasswordStrength(password);
+                    
+                    // Update the strength meter
+                    strengthProgress.style.width = `${strength}%`;
+                    
+                    // Set color based on strength
+                    if (strength < 30) {
+                        strengthProgress.style.backgroundColor = '#E53E3E';
+                        strengthText.textContent = 'Weak';
+                        strengthText.style.color = '#E53E3E';
+                    } else if (strength < 70) {
+                        strengthProgress.style.backgroundColor = '#F6AD55';
+                        strengthText.textContent = 'Moderate';
+                        strengthText.style.color = '#F6AD55';
+                    } else {
+                        strengthProgress.style.backgroundColor = '#38A169';
+                        strengthText.textContent = 'Strong';
+                        strengthText.style.color = '#38A169';
+                    }
+                } else {
+                    strengthMeter.style.display = 'none';
+                    strengthText.style.display = 'none';
+                }
+            });
+            
+            function calculatePasswordStrength(password) {
+                let strength = 0;
+                
+                // Length contribution (up to 30%)
+                strength += Math.min(30, Math.floor(password.length * 3));
+                
+                // Character variety contribution
+                if (/[A-Z]/.test(password)) strength += 15; // Uppercase
+                if (/[a-z]/.test(password)) strength += 15; // Lowercase
+                if (/[0-9]/.test(password)) strength += 15; // Numbers
+                if (/[^A-Za-z0-9]/.test(password)) strength += 25; // Special chars
+                
+                return Math.min(100, strength);
+            }
+            
+            // Check lockout status on page load
+            checkLockStatus();
+        });
+    </script>
