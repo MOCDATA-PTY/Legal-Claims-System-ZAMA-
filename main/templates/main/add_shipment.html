@@ -21,9 +21,11 @@
         background-repeat: no-repeat;
         background-attachment: fixed;
         min-height: 100vh;
-        padding: 2rem 0;
+        padding: 2rem 1rem;  /* Added horizontal padding */
+        margin: 0;  /* Remove default margin */
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         color: var(--dark);
+        box-sizing: border-box;  /* Include padding in width calculation */
     }
     
     .form-container {
@@ -40,18 +42,19 @@
 
     .form-header {
         color: white;
-        padding: 1.5rem;
+        padding: 1.5rem 1rem;  /* Adjusted horizontal padding */
         font-weight: 600;
         text-align: center;
     }
 
     .form-header h2 {
         margin: 0;
-        font-size: 1.75rem;
+        font-size: clamp(1.5rem, 5vw, 1.75rem);  /* Responsive font size */
+        line-height: 1.2;  /* Improved line height */
     }
 
     .form-content {
-        padding: 2.5rem;
+        padding: 1.5rem;  /* Uniform padding */
     }
 
     .form-content label {
@@ -60,6 +63,7 @@
         margin-top: 1.5rem;
         font-weight: 500;
         color: var(--light);
+        font-size: clamp(0.875rem, 4vw, 1rem);  /* Responsive font size */
     }
 
     .form-content input,
@@ -70,10 +74,13 @@
         border: 1.5px solid #DDE3E9;
         border-radius: 10px;
         font-family: inherit;
-        font-size: 1rem;
+        font-size: 16px;  /* Fixed font size of 16px prevents iOS zoom */
         transition: var(--transition);
         background-color: white;
         color: var(--dark);
+        box-sizing: border-box;  /* Include padding in width calculation */
+        -webkit-appearance: none;  /* Remove default styling on iOS */
+        appearance: none;  /* Remove default styling */
     }
 
     .form-content input:focus,
@@ -89,7 +96,7 @@
         padding: 0;
         margin: 0.5rem 0 0;
         color: #dc2626;
-        font-size: 0.875rem;
+        font-size: clamp(0.75rem, 3.5vw, 0.875rem);  /* Responsive font size */
     }
 
     .form-actions {
@@ -101,16 +108,28 @@
 
     .btn {
         flex: 1;
-        padding: 0.75rem 1.5rem;
+        min-width: 140px;  /* Minimum button width */
+        padding: 0.75rem 1rem;
         text-align: center;
         border-radius: 10px;
         font-weight: 500;
         transition: var(--transition);
         border: none;
         cursor: pointer;
-        font-size: 1rem;
-        background-color: var(--primary);
+        font-size: 16px;  /* Fixed font size of 16px prevents iOS zoom */
         color: white;
+        margin-bottom: 0.5rem;  /* Add space when buttons stack */
+        box-sizing: border-box;  /* Include padding and border in width calculation */
+        white-space: nowrap;  /* Prevent text wrapping within buttons */
+        height: 44px;  /* Set explicit height for all buttons */
+        line-height: 1;  /* Reset line height */
+        display: flex;  /* Use flexbox for alignment */
+        justify-content: center;  /* Center text horizontally */
+        align-items: center;  /* Center text vertically */
+    }
+
+    .btn-primary {
+        background-color: var(--primary);
     }
 
     .btn-primary:hover {
@@ -122,10 +141,12 @@
         background-color: var(--light);
         color: var(--dark);
         border: 1.5px solid #DDE3E9;
+        text-decoration: none;  /* Remove underline from link */
     }
 
     .btn-secondary:hover {
         background-color: var(--gray);
+        color: white;  /* Better contrast on hover */
     }
 
     /* Popup Styles */
@@ -140,6 +161,8 @@
         align-items: center;
         justify-content: center;
         z-index: 1000;
+        padding: 1rem;  /* Add padding for small screens */
+        box-sizing: border-box;  /* Include padding in width calculation */
     }
 
     .popup-content {
@@ -147,22 +170,38 @@
         padding: 20px;
         border-radius: var(--border-radius);
         text-align: center;
-        width: 400px;
+        width: 100%;
+        max-width: 400px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        color: var(--dark);  /* Ensure text is dark for contrast */
+    }
+
+    .popup-content h2 {
+        font-size: clamp(1.25rem, 5vw, 1.5rem);  /* Responsive font size */
+        margin-top: 0;
+    }
+
+    .popup-content p {
+        font-size: clamp(0.875rem, 4vw, 1rem);  /* Responsive font size */
     }
 
     .popup-buttons {
         margin-top: 15px;
+        display: flex;
+        flex-wrap: wrap;  /* Allow buttons to wrap */
+        justify-content: center;
+        gap: 10px;
     }
 
     .popup-buttons button {
         padding: 10px 20px;
-        margin: 5px;
         border: none;
         cursor: pointer;
         border-radius: 5px;
-        font-size: 16px;
+        font-size: 16px;  /* Fixed font size of 16px prevents iOS zoom */
         transition: var(--transition);
+        min-width: 120px;  /* Minimum button width */
+        flex: 1;  /* Allow buttons to grow */
     }
 
     .popup-buttons button:first-child {
@@ -184,24 +223,69 @@
         transform: translateY(-2px);
     }
 
-    /* Responsive Styles */
+    /* Improved Responsive Styles */
     @media (max-width: 768px) {
+        body {
+            padding: 1rem;  /* Reduced padding */
+        }
+        
         .form-content {
-            padding: 1.5rem;
+            padding: 1.25rem;  /* Slightly reduced padding */
+        }
+        
+        .form-actions {
+            gap: 8px;  /* Reduced gap */
         }
     }
 
     @media (max-width: 480px) {
         .form-actions {
-            flex-direction: column;
+            flex-direction: column;  /* Stack buttons */
         }
         
         .btn {
             width: 100%;
-            text-align: center;
+            margin-bottom: 0.75rem;
+        }
+        
+        .popup-buttons {
+            flex-direction: column;  /* Stack popup buttons */
+        }
+        
+        .popup-buttons button {
+            width: 100%;
+            margin: 5px 0;
+        }
+        
+        .form-header {
+            padding: 1.25rem 0.75rem;  /* Further reduced padding */
+        }
+    }
+
+    /* Fix for very small screens */
+    @media (max-width: 320px) {
+        .form-content {
+            padding: 1rem;  /* Minimal padding */
+        }
+        
+        .popup-content {
+            padding: 15px;  /* Reduced padding */
+        }
+    }
+
+    /* Touch-friendly targets for mobile */
+    @media (pointer: coarse) {
+        .btn, 
+        .popup-buttons button,
+        .form-content input,
+        .form-content select {
+            min-height: 44px;  /* Minimum touch target size */
         }
     }
 </style>
+
+<!-- Added meta viewport tag to prevent zoom issues -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <div class="form-container">
     <div class="form-header">
