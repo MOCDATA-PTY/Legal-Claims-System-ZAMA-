@@ -1,0 +1,271 @@
+{% load static %}
+
+{% block content %}
+<style>
+    :root {
+        --primary: #0446f1;  /* Bright blue */
+        --primary-dark: #0336c1;  /* Darker shade for hover effects */
+        --secondary: #6C8EBF;  /* Secondary color, adjust as needed */
+        --light: #F0F4F8;  /* Light background */
+        --dark: #1A2533;  /* Dark text */
+        --gray: #64748B;  /* Gray color for text */
+        --border-radius: 12px;  /* Rounded corners */
+        --box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);  /* Shadow for depth */
+        --transition: all 0.3s ease;  /* Smooth transition for interactions */
+    }
+
+    body {
+        background-image: url('{% static "img/Pricing Report Page 1.png" %}');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        min-height: 100vh;
+        padding: 2rem 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: var(--dark);
+    }
+    
+    .form-container {
+        width: 100%;
+        max-width: 550px;  /* Adjusted width */
+        margin: auto;
+        background-color: rgba(0, 0, 0, 0.7);  /* Semi-transparent black */
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        overflow: hidden;
+        backdrop-filter: blur(10px);
+        color: white;  /* Ensure text is readable */
+    }
+
+    .form-header {
+        color: white;
+        padding: 1.5rem;
+        font-weight: 600;
+        text-align: center;
+    }
+
+    .form-header h2 {
+        margin: 0;
+        font-size: 1.75rem;
+    }
+
+    .form-content {
+        padding: 2.5rem;
+    }
+
+    .form-content label {
+        display: block;
+        margin-bottom: 0.5rem;
+        margin-top: 1.5rem;
+        font-weight: 500;
+        color: var(--light);
+    }
+
+    .form-content input,
+    .form-content select,
+    .form-content textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1.5px solid #DDE3E9;
+        border-radius: 10px;
+        font-family: inherit;
+        font-size: 1rem;
+        transition: var(--transition);
+        background-color: white;
+        color: var(--dark);
+    }
+
+    .form-content input:focus,
+    .form-content select:focus,
+    .form-content textarea:focus {
+        outline: none;
+        border-color: var(--secondary);
+        box-shadow: 0 0 0 3px rgba(108, 142, 191, 0.2);
+    }
+
+    .errorlist {
+        list-style: none;
+        padding: 0;
+        margin: 0.5rem 0 0;
+        color: #dc2626;
+        font-size: 0.875rem;
+    }
+
+    .form-actions {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        padding-top: 2rem;
+    }
+
+    .btn {
+        flex: 1;
+        padding: 0.75rem 1.5rem;
+        text-align: center;
+        border-radius: 10px;
+        font-weight: 500;
+        transition: var(--transition);
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+        background-color: var(--primary);
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background-color: var(--primary-dark);
+        box-shadow: 0 4px 12px rgba(59, 74, 103, 0.3);
+    }
+
+    .btn-secondary {
+        background-color: var(--light);
+        color: var(--dark);
+        border: 1.5px solid #DDE3E9;
+    }
+
+    .btn-secondary:hover {
+        background-color: var(--gray);
+    }
+
+    /* Popup Styles */
+    .popup {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+    }
+
+    .popup-content {
+        background: white;
+        padding: 20px;
+        border-radius: var(--border-radius);
+        text-align: center;
+        width: 400px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .popup-buttons {
+        margin-top: 15px;
+    }
+
+    .popup-buttons button {
+        padding: 10px 20px;
+        margin: 5px;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+        font-size: 16px;
+        transition: var(--transition);
+    }
+
+    .popup-buttons button:first-child {
+        background-color: var(--primary);
+        color: white;
+    }
+
+    .popup-buttons button:first-child:hover {
+        background-color: var(--primary-dark);
+        transform: translateY(-2px);
+    }
+
+    .popup-buttons button:last-child {
+        background-color: #f3f4f6;
+    }
+
+    .popup-buttons button:last-child:hover {
+        background-color: #e5e7eb;
+        transform: translateY(-2px);
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+        .form-content {
+            padding: 1.5rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .form-actions {
+            flex-direction: column;
+        }
+        
+        .btn {
+            width: 100%;
+            text-align: center;
+        }
+    }
+</style>
+
+<div class="form-container">
+    <div class="form-header">
+        <h2>Legal Claim Form</h2>
+    </div>
+    <div class="form-content">
+        <form method="POST">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+            <ul class="errorlist">
+                {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+            {% for field in form %}
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}
+            <ul class="errorlist">
+                {% for error in field.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% endfor %}
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Submit Claim</button>
+                <a href="{% url 'shipment_list' %}" class="btn btn-secondary">View All Claims</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Duplicate Claim Popup -->
+{% if duplicate_claim_no %}
+<div id="popup-container" class="popup">
+    <div class="popup-content">
+        <h2>Duplicate Claim Detected</h2>
+        <p>The Claim Number <strong>{{ duplicate_claim_no }}</strong> already exists.</p>
+        <p>Would you like to modify the existing claim or return to the form?</p>
+        <div class="popup-buttons">
+            <button onclick="redirectToEdit()">Modify Data</button>
+            <button onclick="closePopup()">Return to Form</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById("popup-container").style.display = "flex";
+    });
+
+    function redirectToEdit() {
+        window.location.href = "{% url 'edit_shipment' pk=edit_shipment_id %}";  // Redirect to edit page of the existing shipment
+    }
+
+    function closePopup() {
+        document.getElementById("popup-container").style.display = "none";
+    }
+</script>
+{% endif %}
+
+{% endblock %}

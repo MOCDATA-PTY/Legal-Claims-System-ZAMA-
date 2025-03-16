@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claims Records Management</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-light: #dbeafe;
+            --secondary: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --background: #f9fafb;
+            --card-bg: #ffffff;
+            --text: #1f2937;
+            --text-light: #6b7280;
+            --border: #e5e7eb;
+            --radius: 6px;
+            --shadow: 0 1px 3px rgba(0,0,0,0.05);
+            --shadow-lg: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            --spacing: 5px;
+            --light-black: #333333;
+            --import-color: #446f1e;
+            --grey: #777777;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        body {
+            background: url("{% static 'img/Pricing Report Page 1.png' %}") no-repeat center center;
+            
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--text);
+            line-height: 1.5;
+            padding: var(--spacing);
+            position: relative;
+        }
+        
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        .container {
+            width: calc(100% - var(--spacing)*2);
+            margin: 0 auto;
+            padding: 5px 0;
+            position: relative;
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        .logo img {
+            max-height: 80px;
+        }
+        
+        .header {
+            padding: 10px 5px 20px;
+            margin-bottom: var(--spacing);
+            width: 100%;
+            text-align: center;
+        }
+        
+        .header h1 {
+            color: white;
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .header h2 {
+            color: white;
+            font-size: 1rem;
+            font-weight: 400;
+        }
+        
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            margin-bottom: var(--spacing);
+            border: 1px solid var(--border);
+            width: 100%;
+        }
+        
+        .card-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .card-body {
+            padding: 16px;
+        }
+        
+        .action-bar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: var(--spacing);
+            width: 100%;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 16px;
+            border-radius: var(--radius);
+            border: none;
+            font-weight: 500;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-decoration: none;
+            box-shadow: var(--shadow);
+        }
+        
+        .btn-export {
+            background-color: var(--light-black);
+            color: white;
+        }
+        
+        .btn-export:hover {
+            background-color: #222222;
+        }
+        
+        .btn-import {
+            background-color: #1d4ed8;
+            color: white;
+        }
+        
+        .btn-import:hover {
+            background-color: #385d18;
+        }
+        
+        .btn-new {
+            background-color: var(--grey);
+            color: white;
+        }
+        
+        .btn-new:hover {
+            background-color: #666666;
+        }
+        
+        .form-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+            margin-bottom: 16px;
+            width: 100%;
+        }
+        
+        .form-field {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .form-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-light);
+        }
+        
+        .form-control {
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 0.875rem;
+            transition: all 0.15s ease;
+            color: var(--text);
+            background-color: var(--card-bg);
+            width: 100%;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+        }
+        
+        .messages {
+            margin-bottom: var(--spacing);
+            width: 100%;
+        }
+        
+        .message {
+            padding: 12px 16px;
+            border-radius: var(--radius);
+            margin-bottom: var(--spacing);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+        }
+        
+        .message.success {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--secondary);
+            border-left: 3px solid var(--secondary);
+        }
+        
+        .message.error {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+            border-left: 3px solid var(--danger);
+        }
+        
+        .table-responsive {
+            overflow-x: auto;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+        }
+        
+        th {
+            background-color: var(--primary-light);
+            color: var(--primary);
+            text-align: left;
+            padding: 12px 16px;
+            font-weight: 600;
+            white-space: nowrap;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+        
+        tr:hover {
+            background-color: #f1f5f9;
+        }
+        
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .empty-message {
+            text-align: center;
+            color: var(--text-light);
+            padding: 40px 20px;
+            background-color: #f8fafc;
+        }
+        
+        .action-cell {
+            white-space: nowrap;
+        }
+        
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 0.75rem;
+        }
+        
+        .btn-edit {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-edit:hover {
+            background-color: #1d4ed8;
+        }
+        
+        .fa-check-circle {
+            color: var(--secondary);
+        }
+        
+        .fa-times-circle {
+            color: var(--text-light);
+        }
+        
+        @media (max-width: 768px) {
+            .form-group {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-bar {
+                flex-direction: column;
+            }
+            
+            .action-bar .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <img src="{% static 'img/Logo.png' %}" alt="Magnum Opus Consultants Logo">
+        </div>
+        
+        <div class="header">
+            <h1>Magnum Opus Consultants</h1>
+            <h2>Claims Records Management</h2>
+        </div>
+
+        <!-- Messages Section -->
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="message {{ message.tags }}">
+                <i class="fas fa-info-circle"></i> {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Action Buttons -->
+        <div class="action-bar">
+            <a href="{% url 'export_shipments_excel' %}" class="btn btn-export">
+                <i class="fas fa-file-export"></i> Export to Excel
+            </a>
+            <a href="{% url 'import_shipments' %}" class="btn btn-import">
+                <i class="fas fa-file-import"></i> Import from Excel
+            </a>
+            <a href="{% url 'add_shipment' %}" class="btn btn-new">
+                <i class="fas fa-plus"></i> Add New Claim
+            </a>
+        </div>
+
+        <!-- Filter Card -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    <i class="fas fa-filter"></i> Filter Claims
+                </div>
+            </div>
+            <div class="card-body">
+                <form method="get" action="">
+                    <div class="form-group">
+                        <div class="form-field">
+                            <label class="form-label">Claim No</label>
+                            <input type="text" class="form-control" name="claim_no" value="{{ request.GET.claim_no }}" placeholder="Enter claim number">
+                        </div>
+                        <div class="form-field">
+                            <label class="form-label">Claiming Client</label>
+                            <input type="text" class="form-control" name="client" value="{{ request.GET.client }}" placeholder="Enter client name">
+                        </div>
+                        <div class="form-field">
+                            <label class="form-label">Branch</label>
+                            <select class="form-control" name="branch">
+                                <option value="">All Branches</option>
+                                {% for branch in branches %}
+                                <option value="{{ branch }}" {% if request.GET.branch == branch %}selected{% endif %}>{{ branch }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-field">
+                            <label class="form-label">Intend Date From</label>
+                            <input type="date" class="form-control" name="intend_date_from" value="{{ request.GET.intend_date_from }}">
+                        </div>
+                        <div class="form-field">
+                            <label class="form-label">Intend Date To</label>
+                            <input type="date" class="form-control" name="intend_date_to" value="{{ request.GET.intend_date_to }}">
+                        </div>
+                        <div class="form-field">
+                            <label class="form-label">Formal Date From</label>
+                            <input type="date" class="form-control" name="formal_date_from" value="{{ request.GET.formal_date_from }}">
+                        </div>
+                        <div class="form-field">
+                            <label class="form-label">Formal Date To</label>
+                            <input type="date" class="form-control" name="formal_date_to" value="{{ request.GET.formal_date_to }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-field">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-search"></i> Apply Filters
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Claims Table -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    <i class="fas fa-file-invoice-dollar"></i> Claims List
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Claim No</th>
+                                <th>Client</th>
+                                <th>Branch</th>
+                                <th>Formal</th>
+                                <th>Intend Date</th>
+                                <th>Formal Date</th>
+                                <th>Claimed Amount</th>
+                                <th>Carrier Paid</th>
+                                <th>AWA Paid</th>
+                                <th>Insurance Paid</th>
+                                <th>Closed Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for shipment in shipments %}
+                            <tr>
+                                <td>{{ shipment.Claim_No }}</td>
+                                <td>{{ shipment.Claiming_Client }}</td>
+                                <td>{{ shipment.Branch }}</td>
+                                <td>
+                                    {% if shipment.Formal_Claim_Received %}
+                                    <i class="fas fa-check-circle"></i>
+                                    {% else %}
+                                    <i class="fas fa-times-circle"></i>
+                                    {% endif %}
+                                </td>
+                                <td>{{ shipment.Intend_Claim_Date|date:"Y-m-d" }}</td>
+                                <td>{{ shipment.Formal_Claim_Date_Received|date:"Y-m-d" }}</td>
+                                <td>{{ shipment.Claimed_Amount }}</td>
+                                <td>{{ shipment.Amount_Paid_By_Carrier }}</td>
+                                <td>{{ shipment.Amount_Paid_By_Awa }}</td>
+                                <td>{{ shipment.Amount_Paid_By_Insurance }}</td>
+                                <td>{{ shipment.Closed_Date|date:"Y-m-d" }}</td>
+                                <td class="action-cell">
+                                    <a class="btn btn-sm btn-edit" href="{% url 'edit_shipment' shipment.pk %}">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="12" class="empty-message">
+                                    <i class="fas fa-info-circle"></i> No claims found matching your criteria.
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
