@@ -145,9 +145,7 @@ def user_login(request):
                 request.session.set_expiry(0)  # Expire session on browser close
                 return redirect('home')  # 🚀 Redirect immediately
         else:
-            if not user_exists:
-                time.sleep(2)  # ⏳ Wait for 2 seconds before showing error
-                messages.error(request, "Invalid username or password. Please try again.")
+             messages.error(request, "Invalid username or password. Please try again.")
 
     else:
         form = LoginForm()
