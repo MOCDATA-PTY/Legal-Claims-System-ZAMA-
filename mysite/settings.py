@@ -18,9 +18,13 @@ DEBUG = os.getenv("DEBUG", "False") == "True"
 LOGIN_REDIRECT_URL = 'home'
 LOGIN_URL = 'login'
 
-# Set session to expire when the browser is closed
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-SESSION_COOKIE_AGE = 1800  # 30 minutes
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Store sessions in database
+SESSION_COOKIE_AGE = 86400  # Keep users logged in for 1 day
+SESSION_SAVE_EVERY_REQUEST = True  # Save session on every request
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Keep session active after closing the browser
+SESSION_COOKIE_SECURE = False  # Change to True if using HTTPS
+SESSION_COOKIE_HTTPONLY = True  # Prevent JavaScript access to cookies
+SESSION_COOKIE_SAMESITE = 'Lax'  # Prevent session issues with CSRF
 
 ALLOWED_HOSTS = ["*"]  # Change this to your actual domain in production
 

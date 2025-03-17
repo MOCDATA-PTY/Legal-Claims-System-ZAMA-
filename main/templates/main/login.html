@@ -538,16 +538,7 @@
 </div>
 
 <!-- Display error message if authentication fails -->
-{% if form.errors %}
-<div class="error-message active">
-    <i class="fas fa-exclamation-circle"></i> Invalid username or password. Please try again.
-</div>
-{% endif %}
 
-<!-- Display login attempt message if too many failed attempts -->
-<div class="error-message" id="attempts-error">
-    <i class="fas fa-exclamation-triangle"></i> Too many failed login attempts. Please wait.
-</div>
 
 <!-- Lockout timer display -->
 <div class="lockout-timer" id="lockout-timer">

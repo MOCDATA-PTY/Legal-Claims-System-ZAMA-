@@ -13,4 +13,5 @@ urlpatterns = [
     # path('666/', views.register, name='register'),  # User registration
     path('get-client-names/', views.get_client_names, name='get_client_names'),  # Client names API
     path('import/excel/', views.import_shipments, name='import_shipments'),  # Import shipments from Excel
+    path('delete_shipment/<int:pk>/', views.delete_shipment, name='delete_shipment'),
 ]
