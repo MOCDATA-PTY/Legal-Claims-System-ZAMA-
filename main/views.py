@@ -151,6 +151,7 @@ def user_login(request):
         form = LoginForm()
 
     return render(request, 'main/login.html', {'form': form})
+
 def register(request):
     """Handle new user registration and automatic login upon successful registration."""
     clear_messages(request)
@@ -185,7 +186,41 @@ def delete_shipment(request, pk):
 
 # Helper functions below
 def apply_filters(request, shipments):
-    # Implement filtering logic based on request parameters
+    """Apply filters to the shipments queryset based on request parameters."""
+    
+    # Filter by claim number
+    claim_no = request.GET.get('claim_no')
+    if claim_no:
+        shipments = shipments.filter(Claim_No__icontains=claim_no)
+    
+    # Filter by client name
+    client = request.GET.get('client')
+    if client:
+        shipments = shipments.filter(Claiming_Client__icontains=client)
+    
+    # Filter by branch
+    branch = request.GET.get('branch')
+    if branch:
+        shipments = shipments.filter(Branch=branch)
+    
+    # Filter by Intend Date range
+    intend_date_from = request.GET.get('intend_date_from')
+    if intend_date_from:
+        shipments = shipments.filter(Intend_Claim_Date__gte=intend_date_from)
+    
+    intend_date_to = request.GET.get('intend_date_to')
+    if intend_date_to:
+        shipments = shipments.filter(Intend_Claim_Date__lte=intend_date_to)
+    
+    # Filter by Formal Date range
+    formal_date_from = request.GET.get('formal_date_from')
+    if formal_date_from:
+        shipments = shipments.filter(Formal_Claim_Date_Received__gte=formal_date_from)
+    
+    formal_date_to = request.GET.get('formal_date_to')
+    if formal_date_to:
+        shipments = shipments.filter(Formal_Claim_Date_Received__lte=formal_date_to)
+    
     return shipments
 
 def create_excel_response(shipments):
