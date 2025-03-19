@@ -420,7 +420,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const clientInput = document.getElementById('id_Claiming_Client');
     const clientDropdown = document.getElementById('client-dropdown');
-    let clients = [{% for client in clients %}'{{ client }}',{% endfor %}];
+    // let clients = [{% for client in clients %}'{{ client }}',{% endfor %}];
     
     // Initialize with all clients
     function initializeDropdown() {
