@@ -13,7 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-@=2jh*jwvj#7=oh+4+ae2)y9j4ixy@f4l^5sf-3iv$2elvp4y#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", "False") == "True"
+DEBUG = False
 
 LOGIN_REDIRECT_URL = 'home'
 LOGIN_URL = 'login'
@@ -26,7 +26,7 @@ SESSION_COOKIE_SECURE = False  # Change to True if using HTTPS
 SESSION_COOKIE_HTTPONLY = True  # Prevent JavaScript access to cookies
 SESSION_COOKIE_SAMESITE = 'Lax'  # Prevent session issues with CSRF
 
-ALLOWED_HOSTS = ["*"]  # Change this to your actual domain in production
+ALLOWED_HOSTS = ["167.88.43.168"]  # Change this to your actual domain in production
 
 # Application definition
 INSTALLED_APPS = [
