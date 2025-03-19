@@ -348,28 +348,42 @@
         </div>
 
         <!-- Messages Section -->
-        {% if messages %}
-        <div class="messages">
-            {% for message in messages %}
-            <div class="message {{ message.tags }}">
-                <i class="fas fa-info-circle"></i> {{ message }}
-            </div>
-            {% endfor %}
-        </div>
-        {% endif %}
-
-        <!-- Action Buttons -->
+     
         <div class="action-bar">
+            <!-- Export to Excel Button -->
             <a href="{% url 'export_shipments_excel' %}" class="btn btn-export">
                 <i class="fas fa-file-export"></i> Export to Excel
             </a>
+            
+            <!-- Import from Excel Button -->
             <a href="{% url 'import_shipments' %}" class="btn btn-import">
                 <i class="fas fa-file-import"></i> Import from Excel
             </a>
+            
+            <!-- Add New Claim Button -->
             <a href="{% url 'add_shipment' %}" class="btn btn-new">
                 <i class="fas fa-plus"></i> Add New Claim
             </a>
+            
+            <!-- Logout Button (Matching Other Buttons) -->
+            <form action="{% url 'logout' %}" method="post" class="logout-form" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </form>
+            
+            <!-- Clear Database Button -->
+            <form action="{% url 'clear_database' %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete all records? This action cannot be undone.');">
+                    <i class="fas fa-trash-alt"></i> Clear Database
+                </button>
+            </form>
         </div>
+        
+        
+        
 
         <!-- Filter Card -->
         <div class="card">
@@ -489,11 +503,7 @@
                                 </td>
                             </tr>
                             {% empty %}
-                            <tr>
-                                <td colspan="12" class="empty-message">
-                                    <i class="fas fa-info-circle"></i> No claims found matching your criteria.
-                                </td>
-                            </tr>
+                         
                             {% endfor %}
                         </tbody>
                         

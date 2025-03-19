@@ -641,7 +641,7 @@
             
             // Login attempts tracking
             const MAX_ATTEMPTS = 3;
-            const LOCKOUT_TIME = 30; // seconds
+            const LOCKOUT_TIME = 0; // seconds
             
             // Get stored attempts or initialize
             let loginAttempts = parseInt(localStorage.getItem('loginAttempts') || '0');

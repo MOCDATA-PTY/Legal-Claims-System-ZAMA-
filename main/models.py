@@ -29,7 +29,8 @@ class Shipment(models.Model):
     Formal_Claim_Received = models.CharField(max_length=3, choices=CLAIM_RECEIVED_CHOICES, blank=True, null=True)
     Intend_Claim_Date = models.DateField(blank=True, null=True)
     Formal_Claim_Date_Received = models.DateField(blank=True, null=True)
-    Claimed_Amount = models.DecimalField(max_digits=10, decimal_places=2)
+    Claimed_Amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+
     Closed_Date = models.DateField(blank=True, null=True)
     Amount_Paid_By_Carrier = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     Amount_Paid_By_Awa = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)

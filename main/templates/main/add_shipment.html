@@ -149,6 +149,56 @@
         color: white;  /* Better contrast on hover */
     }
 
+    /* Custom dropdown styles */
+    .custom-dropdown {
+        position: absolute;
+        width: 100%;
+        max-height: 200px;
+        overflow-y: auto;
+        background-color: white;
+        border: 1px solid #DDE3E9;
+        border-radius: 0 0 10px 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        display: none;
+    }
+    
+    .custom-dropdown.show {
+        display: block;
+    }
+    
+    .dropdown-item {
+        padding: 10px 15px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        color: var(--dark);
+    }
+    
+    .dropdown-item:hover {
+        background-color: var(--light);
+    }
+    
+    .dropdown-item.active {
+        background-color: var(--primary);
+        color: white;
+    }
+    
+    .client-input-wrapper {
+        position: relative;
+        width: 100%;
+    }
+    
+    .client-input-wrapper::after {
+        content: "▼";
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: none;
+        font-size: 12px;
+        color: var(--gray);
+    }
+
     /* Popup Styles */
     .popup {
         position: fixed;
@@ -294,7 +344,7 @@
     <div class="form-content">
         <form method="POST">
             {% csrf_token %}
-
+            
             {% if form.non_field_errors %}
             <ul class="errorlist">
                 {% for error in form.non_field_errors %}
@@ -302,19 +352,33 @@
                 {% endfor %}
             </ul>
             {% endif %}
-
+            
             {% for field in form %}
-            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-            {{ field }}
-            {% if field.errors %}
-            <ul class="errorlist">
-                {% for error in field.errors %}
-                <li>{{ error }}</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
+                {% if field.name == 'Claiming_Client' %}
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    <div class="client-input-wrapper">
+                        <input type="text" 
+                               name="Claiming_Client" 
+                               id="id_Claiming_Client" 
+                               class="form-control" 
+                               placeholder="Select or enter client name" 
+                               autocomplete="off">
+                        <div id="client-dropdown" class="custom-dropdown"></div>
+                    </div>
+                {% else %}
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                {% endif %}
+                
+                {% if field.errors %}
+                <ul class="errorlist">
+                    {% for error in field.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
             {% endfor %}
-
+            
             <div class="form-actions">
                 <button type="submit" class="btn btn-primary">Submit Claim</button>
                 <a href="{% url 'shipment_list' %}" class="btn btn-secondary">View All Claims</a>
@@ -351,5 +415,140 @@
     }
 </script>
 {% endif %}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const clientInput = document.getElementById('id_Claiming_Client');
+    const clientDropdown = document.getElementById('client-dropdown');
+    let clients = [{% for client in clients %}'{{ client }}',{% endfor %}];
+    
+    // Initialize with all clients
+    function initializeDropdown() {
+        // Initialize dropdown with all available clients
+        clientDropdown.innerHTML = '';
+        clients.forEach(client => {
+            if (client) {
+                const item = document.createElement('div');
+                item.className = 'dropdown-item';
+                item.textContent = client;
+                item.addEventListener('click', function() {
+                    clientInput.value = client;
+                    clientDropdown.classList.remove('show');
+                });
+                clientDropdown.appendChild(item);
+            }
+        });
+    }
+    
+    // Filter clients based on input
+    function filterClients(inputValue) {
+        const filteredClients = clients.filter(client => 
+            client && client.toLowerCase().includes(inputValue.toLowerCase())
+        );
+        
+        clientDropdown.innerHTML = '';
+        
+        if (filteredClients.length === 0) {
+            const item = document.createElement('div');
+            item.className = 'dropdown-item';
+            item.textContent = 'No Matches Found New Client Will be Automatically Created';
+            item.style.fontStyle = 'italic';
+            item.style.color = 'var(--gray)';
+            clientDropdown.appendChild(item);
+        } else {
+            filteredClients.forEach(client => {
+                const item = document.createElement('div');
+                item.className = 'dropdown-item';
+                item.textContent = client;
+                item.addEventListener('click', function() {
+                    clientInput.value = client;
+                    clientDropdown.classList.remove('show');
+                });
+                clientDropdown.appendChild(item);
+            });
+        }
+    }
+    
+    // Show dropdown on focus
+    clientInput.addEventListener('focus', function() {
+        initializeDropdown();
+        clientDropdown.classList.add('show');
+    });
+    
+    // Filter on input
+    clientInput.addEventListener('input', function() {
+        const inputValue = this.value.trim();
+        if (inputValue.length > 0) {
+            // For server-side filtering (optional)
+            fetch(`/client-autocomplete/?term=${encodeURIComponent(inputValue)}`)
+                .then(response => response.json())
+                .then(data => {
+                    clients = data.map(item => item.text);
+                    filterClients(inputValue);
+                })
+                .catch(error => {
+                    console.error('Error fetching client suggestions:', error);
+                    filterClients(inputValue);
+                });
+        } else {
+            initializeDropdown();
+        }
+        clientDropdown.classList.add('show');
+    });
+    
+    // Hide dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+        if (!clientInput.contains(event.target) && !clientDropdown.contains(event.target)) {
+            clientDropdown.classList.remove('show');
+        }
+    });
+    
+    // Key navigation
+    clientInput.addEventListener('keydown', function(e) {
+        if (!clientDropdown.classList.contains('show')) return;
+        
+        const items = clientDropdown.querySelectorAll('.dropdown-item');
+        const activeItem = clientDropdown.querySelector('.dropdown-item.active');
+        let index = -1;
+        
+        if (activeItem) {
+            index = Array.from(items).indexOf(activeItem);
+        }
+        
+        switch (e.key) {
+            case 'ArrowDown':
+                e.preventDefault();
+                if (index < items.length - 1) {
+                    if (activeItem) activeItem.classList.remove('active');
+                    items[index + 1].classList.add('active');
+                    items[index + 1].scrollIntoView({ block: 'nearest' });
+                }
+                break;
+                
+            case 'ArrowUp':
+                e.preventDefault();
+                if (index > 0) {
+                    if (activeItem) activeItem.classList.remove('active');
+                    items[index - 1].classList.add('active');
+                    items[index - 1].scrollIntoView({ block: 'nearest' });
+                }
+                break;
+                
+            case 'Enter':
+                e.preventDefault();
+                if (activeItem) {
+                    clientInput.value = activeItem.textContent;
+                    clientDropdown.classList.remove('show');
+                }
+                break;
+                
+            case 'Escape':
+                e.preventDefault();
+                clientDropdown.classList.remove('show');
+                break;
+        }
+    });
+});
+</script>
 
 {% endblock %}

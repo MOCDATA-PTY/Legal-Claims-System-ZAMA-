@@ -8,6 +8,21 @@ from .models import Shipment
 import openpyxl
 import datetime
 from django.db import IntegrityError
+from django.contrib.auth.decorators import login_required
+from django.db import transaction
+
+@login_required(login_url='login')
+def clear_database(request):
+    if request.method == 'POST':
+        with transaction.atomic():
+            # Assuming 'Shipment' is the model you want to clear
+            Shipment.objects.all().delete()
+            messages.success(request, "All shipments have been successfully deleted.")
+        return redirect('shipment_list')  # Redirect to a safe page after clearing the database
+    else:
+        messages.error(request, "Invalid request method.")
+        return redirect('shipment_list')
+
 
 def clear_messages(request):
     """Helper function to clear all messages from the request."""
@@ -28,27 +43,37 @@ def home(request):
 
 @login_required(login_url='login')
 def add_shipment(request):
-    """Handle the creation of new shipments with duplicate `Claim_No` prevention."""
-    clear_messages(request)
+    # Get all unique clients from the database
+    existing_clients = Shipment.objects.values_list('Claiming_Client', flat=True).distinct()
+
     if request.method == 'POST':
         form = ShipmentForm(request.POST)
         claim_no = request.POST.get('Claim_No')
-        existing_shipment = Shipment.objects.filter(Claim_No=claim_no).first()
-        if existing_shipment:
-            messages.warning(request, 'Duplicate claim number, consider editing the existing entry.')
+
+        if Shipment.objects.filter(Claim_No=claim_no).exists():
+            existing_shipment = Shipment.objects.get(Claim_No=claim_no)
+            messages.warning(request, f'Duplicate claim number {claim_no}, consider editing the existing entry.')
             return render(request, 'main/add_shipment.html', {
                 'form': form,
+                'clients': existing_clients,
                 'duplicate_claim_no': claim_no,
                 'edit_shipment_id': existing_shipment.id
             })
+
         if form.is_valid():
             form.save()
             messages.success(request, 'Shipment added successfully.')
             return redirect('shipment_list')
+        else:
+            messages.error(request, 'Please correct the errors below.')
+
     else:
         form = ShipmentForm()
-    return render(request, 'main/add_shipment.html', {'form': form})
 
+    return render(request, 'main/add_shipment.html', {
+        'form': form,
+        'clients': existing_clients
+    })
 @login_required(login_url='login')
 def shipment_list(request):
     """List all shipments with the option to apply filters."""
@@ -125,33 +150,24 @@ def get_client_names(request):
     return JsonResponse(list(clients), safe=False)
 
 def user_login(request):
-    """Handle user login while preventing unnecessary error messages."""
     if request.method == 'POST':
         form = LoginForm(request, data=request.POST)
         username = request.POST.get('username')
         password = request.POST.get('password')
-
-        # Check if user exists in the database
-        user_exists = False
-        from django.contrib.auth.models import User
-        if User.objects.filter(username=username).exists():
-            user_exists = True
-
         user = authenticate(username=username, password=password)
-
         if user:
             if user.is_active:
                 login(request, user)
                 request.session.set_expiry(0)  # Expire session on browser close
-                return redirect('home')  # 🚀 Redirect immediately
+                return redirect('home')
         else:
-             messages.error(request, "Invalid username or password. Please try again.")
-
+            messages.error(request, "Invalid username or password. Please try again.")
     else:
         form = LoginForm()
 
-    return render(request, 'main/login.html', {'form': form})
-
+    response = render(request, 'main/login.html', {'form': form})
+    response['Cache-Control'] = 'no-store'
+    return response
 def register(request):
     """Handle new user registration and automatic login upon successful registration."""
     clear_messages(request)
@@ -287,3 +303,15 @@ def process_excel_data(worksheet):
             error_entries.append(f'Row with Claim No {claim_no}: {str(e)}')
 
     return skipped_entries, created_entries, error_entries
+
+
+@login_required(login_url='login')
+def client_autocomplete(request):
+    term = request.GET.get('term', '')
+    clients = Shipment.objects.filter(
+        Claiming_Client__icontains=term
+    ).values_list('Claiming_Client', flat=True).distinct()
+    
+    suggestions = [{'id': client, 'text': client} for client in clients if client]
+
+    return JsonResponse(suggestions, safe=False)    
