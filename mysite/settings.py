@@ -26,7 +26,7 @@ SESSION_COOKIE_SECURE = False  # Change to True if using HTTPS
 SESSION_COOKIE_HTTPONLY = True  # Prevent JavaScript access to cookies
 SESSION_COOKIE_SAMESITE = 'Lax'  # Prevent session issues with CSRF
 
-ALLOWED_HOSTS = ["167.88.43.168"]  # Change this to your actual domain in production
+ALLOWED_HOSTS = ["*"]  # Change this to your actual domain in production
 
 # Application definition
 INSTALLED_APPS = [
