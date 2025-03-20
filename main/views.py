@@ -284,18 +284,114 @@ def process_excel_data(worksheet):
             skipped_entries.append(claim_no)
             continue
         try:
+            # Handle date conversions
+            intend_date = None
+            if row[4]:
+                if isinstance(row[4], datetime.date):
+                    intend_date = row[4]
+                elif isinstance(row[4], str):
+                    try:
+                        intend_date = datetime.datetime.strptime(row[4], "%Y-%m-%d").date()
+                    except ValueError:
+                        # Try other date formats if the first one fails
+                        try:
+                            intend_date = datetime.datetime.strptime(row[4], "%d/%m/%Y").date()
+                        except ValueError:
+                            intend_date = None
+            
+            formal_date = None
+            if row[5]:
+                if isinstance(row[5], datetime.date):
+                    formal_date = row[5]
+                elif isinstance(row[5], str):
+                    try:
+                        formal_date = datetime.datetime.strptime(row[5], "%Y-%m-%d").date()
+                    except ValueError:
+                        # Try other date formats if the first one fails
+                        try:
+                            formal_date = datetime.datetime.strptime(row[5], "%d/%m/%Y").date()
+                        except ValueError:
+                            formal_date = None
+            
+            closed_date = None
+            if row[10]:
+                if isinstance(row[10], datetime.date):
+                    closed_date = row[10]
+                elif isinstance(row[10], str):
+                    try:
+                        closed_date = datetime.datetime.strptime(row[10], "%Y-%m-%d").date()
+                    except ValueError:
+                        # Try other date formats if the first one fails
+                        try:
+                            closed_date = datetime.datetime.strptime(row[10], "%d/%m/%Y").date()
+                        except ValueError:
+                            closed_date = None
+            
+            # Handle numeric conversions safely
+            claimed_amount = 0
+            if row[6]:
+                if isinstance(row[6], (int, float)):
+                    claimed_amount = float(row[6])
+                elif isinstance(row[6], str) and row[6].strip():
+                    # Remove any non-numeric characters except decimal point
+                    clean_str = ''.join(c for c in row[6] if c.isdigit() or c == '.')
+                    if clean_str:
+                        claimed_amount = float(clean_str)
+            
+            carrier_amount = 0
+            if row[7]:
+                if isinstance(row[7], (int, float)):
+                    carrier_amount = float(row[7])
+                elif isinstance(row[7], str) and row[7].strip():
+                    clean_str = ''.join(c for c in row[7] if c.isdigit() or c == '.')
+                    if clean_str:
+                        carrier_amount = float(clean_str)
+            
+            awa_amount = 0
+            if row[8]:
+                if isinstance(row[8], (int, float)):
+                    awa_amount = float(row[8])
+                elif isinstance(row[8], str) and row[8].strip():
+                    clean_str = ''.join(c for c in row[8] if c.isdigit() or c == '.')
+                    if clean_str:
+                        awa_amount = float(clean_str)
+            
+            insurance_amount = 0
+            if row[9]:
+                if isinstance(row[9], (int, float)):
+                    insurance_amount = float(row[9])
+                elif isinstance(row[9], str) and row[9].strip():
+                    clean_str = ''.join(c for c in row[9] if c.isdigit() or c == '.')
+                    if clean_str:
+                        insurance_amount = float(clean_str)
+            
+            # Convert formal claim received to YES/NO format
+            formal_claim = "NO"
+            if row[3]:
+                if isinstance(row[3], bool):
+                    formal_claim = "YES" if row[3] else "NO"
+                elif isinstance(row[3], str):
+                    if row[3].upper() in ["YES", "Y", "TRUE", "1"]:
+                        formal_claim = "YES"
+            
+            # Get branch value and validate it's in BRANCH_CHOICES
+            branch = row[2] or ""
+            # Ensure branch code is valid (you may want to add more validation)
+            if branch and branch not in [choice[0] for choice in Shipment.BRANCH_CHOICES]:
+                branch = ""  # Set to empty if invalid
+            
             shipment = Shipment(
                 Claim_No=claim_no,
                 Claiming_Client=row[1] or "",
-                Branch=row[2] or "",
-                Formal_Claim_Received=bool(row[3]),
-                Intend_Claim_Date=row[4] if isinstance(row[4], datetime.date) else None,
-                Formal_Claim_Date_Received=row[5] if isinstance(row[5], datetime.date) else None,
-                Claimed_Amount=float(row[6]) if row[6] else 0,
-                Amount_Paid_By_Carrier=float(row[7]) if row[7] else 0,
-                Amount_Paid_By_Awa=float(row[8]) if row[8] else 0,
-                Amount_Paid_By_Insurance=float(row[9]) if row[9] else 0,
-                Closed_Date=row[10] if isinstance(row[10], datetime.date) else None
+                Branch=branch,
+                Formal_Claim_Received=formal_claim,
+                Intend_Claim_Date=intend_date,
+                Formal_Claim_Date_Received=formal_date,
+                Claimed_Amount=claimed_amount,
+                Amount_Paid_By_Carrier=carrier_amount,
+                Amount_Paid_By_Awa=awa_amount,
+                Amount_Paid_By_Insurance=insurance_amount,
+                Closed_Date=closed_date
             )
             shipment.save()
             created_entries += 1
@@ -303,7 +399,6 @@ def process_excel_data(worksheet):
             error_entries.append(f'Row with Claim No {claim_no}: {str(e)}')
 
     return skipped_entries, created_entries, error_entries
-
 
 @login_required(login_url='login')
 def client_autocomplete(request):
