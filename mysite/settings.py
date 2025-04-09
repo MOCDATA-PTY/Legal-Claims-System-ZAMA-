@@ -71,26 +71,19 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
 
-# # Database (SQLite for Development)
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'django_db',  # Database name
-#         'USER': 'MagnumOpus',  # MySQL username (this is the user you created earlier)
-#         'PASSWORD': 'mk7z@Geg1234',  # Password for your MySQL user
-#         'HOST': '167.88.43.168',  # IP address of your MySQL server
-#         'PORT': '3306',  # Default MySQL port
-#     }
-# }
-
-
 # Database (SQLite for Development)
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',  # SQLite database file path
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'django_db',  # Database name
+        'USER': 'MagnumOpus',  # MySQL username (this is the user you created earlier)
+        'PASSWORD': 'mk7z@Geg1234',  # Password for your MySQL user
+        'HOST': '167.88.43.168',  # IP address of your MySQL server
+        'PORT': '3306',  # Default MySQL port
     }
 }
+
+
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
