@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Legal Claims System secure login portal">
     <title>Legal Claims System - Login</title>
     <!-- Preload critical assets -->
-    <link rel="preload" href="{% static 'img/Logo.png' %}" as="image" fetchpriority="high">
-    <link rel="preload" href="{% static 'img/Pricing Report Page 1.jpg' %}" as="image" fetchpriority="high">
+    <link rel="preload" href="img/Logo.png" as="image" fetchpriority="high">
+    <link rel="preload" href="img/Pricing Report Page 1.jpg" as="image" fetchpriority="high">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <!-- Critical CSS -->
     <style>
@@ -48,7 +47,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: url("{% static 'img/Pricing Report Page 1.jpg' %}") no-repeat center center;
+            background: url("img/Pricing Report Page 1.jpg") no-repeat center center;
             background-size: cover;
             position: relative;
             padding: 2rem;
@@ -291,7 +290,7 @@
             <div class="login-form">
                 <div class="logo-area">
                     <div class="logo-placeholder">
-                        <img src="{% static 'img/Logo.png' %}" alt="Legal Claims System Logo" width="90" height="90">
+                        <img src="img/Logo.png" alt="Legal Claims System Logo" width="90" height="90">
                     </div>
                 </div>
                 <div class="login-header">
@@ -300,7 +299,7 @@
                 </div>
 
                 <!-- Error message area -->
-            
+                <div class="error-message" id="attempts-error"></div>
 
                 <!-- Lockout timer display -->
                 <div class="lockout-timer" id="lockout-timer">
@@ -309,8 +308,8 @@
                     <p>Please wait before trying again</p>
                 </div>
 
-                <form method="post" action="{% url 'login' %}" autocomplete="off" id="login-form">
-                    {% csrf_token %}
+                <form method="post" action="/login" autocomplete="off" id="login-form">
+                    <!-- CSRF token removed for prototype -->
                     
                     <div class="form-group">
                         <label for="username" class="form-label">Username</label>
@@ -347,7 +346,7 @@
                         <input type="hidden" id="captcha-token" name="captcha_token" value="">
                     </div>
                     
-                    <input type="hidden" name="next" value="{{ request.GET.next }}">
+                    <input type="hidden" name="next" value="">
                     <button type="submit" class="btn" id="login-button">
                         Sign In <i class="fas fa-arrow-right"></i>
                     </button>
@@ -637,14 +636,14 @@
             const lockoutTimer = document.getElementById('lockout-timer');
             const timerCountdown = document.getElementById('timer-countdown');
             
-            if (!form || !loginButton || !attemptsError || !lockoutTimer || !timerCountdown) {
+            if (!form || !loginButton) {
                 // Critical elements missing, exit early
                 return;
             }
             
             // Login attempts tracking
             const MAX_ATTEMPTS = 3;
-            const LOCKOUT_TIME = 0; // seconds
+            const LOCKOUT_TIME = 30; // seconds
             
             // Get stored attempts or initialize
             let loginAttempts = parseInt(localStorage.getItem('loginAttempts') || '0');
@@ -687,8 +686,8 @@
                 enableForm();
                 
                 // Hide lockout elements
-                attemptsError.classList.remove('active');
-                lockoutTimer.classList.remove('active');
+                if (attemptsError) attemptsError.classList.remove('active');
+                if (lockoutTimer) lockoutTimer.classList.remove('active');
             }
             
             // Initiate a new lockout
@@ -711,11 +710,11 @@
                 disableForm();
                 
                 // Show lockout message
-                attemptsError.classList.add('active');
-                lockoutTimer.classList.add('active');
+                if (attemptsError) attemptsError.classList.add('active');
+                if (lockoutTimer) lockoutTimer.classList.add('active');
                 
                 // Start countdown
-                startCountdown(remainingSeconds);
+                if (timerCountdown) startCountdown(remainingSeconds);
             }
             
             // Start countdown timer
@@ -775,10 +774,9 @@
             
             // Show error message
             function showError(message) {
-                const errorDiv = document.querySelector('.error-message.active') || attemptsError;
-                if (errorDiv) {
-                    errorDiv.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message}`;
-                    errorDiv.classList.add('active');
+                if (attemptsError) {
+                    attemptsError.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message}`;
+                    attemptsError.classList.add('active');
                 }
             }
             
@@ -813,11 +811,10 @@
                         return;
                     }
                     
-                    // Submit the form to the server
-                    this.submit();
-                    
-                    // Increment the attempt counter
-                    incrementAttempts();
+                    // For prototype - just simulate a successful login
+                    // In a real app, you would submit to server here
+                    alert('Login successful! Redirecting to dashboard...');
+                    window.location.href = 'dashboard.html';
                 });
             }
            
