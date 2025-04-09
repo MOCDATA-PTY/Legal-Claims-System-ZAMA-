@@ -4,9 +4,14 @@
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Legal Claims System - Import Shipments interface for uploading Excel files">
     <title>Legal Claims System - Import Shipments</title>
-    <!-- Font Awesome for icons -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Preload critical assets -->
+    <link rel="preload" href="{% static 'img/Logo.png' %}" as="image">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin>
+    <!-- Load only the required Font Awesome icons instead of the entire library -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/fontawesome.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/solid.min.css" rel="stylesheet">
     <style>
         :root {
             --primary: #3B4A67;
@@ -28,7 +33,7 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             background-color: var(--light);
             color: var(--dark);
             line-height: 1.6;
@@ -50,22 +55,11 @@
             padding: 2rem;
         }
 
-        .container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: 1;
-        }
-
         .import-form-wrapper {
             width: 100%;
             max-width: 750px;
             position: relative;
             z-index: 2;
-            transition: var(--transition);
         }
 
         .import-form {
@@ -74,7 +68,6 @@
             box-shadow: var(--box-shadow);
             padding: 2.5rem;
             backdrop-filter: blur(10px);
-            transition: var(--transition);
             animation: fadeIn 0.8s ease;
         }
 
@@ -92,7 +85,6 @@
             height: 90px;
             width: 90px;
             margin: 0 auto;
-            transition: var(--transition);
             animation: logoAppear 1s ease;
         }
 
@@ -168,7 +160,6 @@
             padding: 2rem;
             border: 2px dashed #DDE3E9;
             border-radius: var(--border-radius);
-            transition: var(--transition);
             cursor: pointer;
             background-color: #F8FAFC;
         }
@@ -206,7 +197,7 @@
         }
 
         .btn {
-            display: inline-block;
+            display: flex;
             width: 100%;
             padding: 0.75rem 1.5rem;
             background-color: var(--primary);
@@ -214,13 +205,11 @@
             text-decoration: none;
             border-radius: 10px;
             font-weight: 500;
-            transition: var(--transition);
             border: none;
             cursor: pointer;
             font-size: 1rem;
             height: 54px;
             letter-spacing: 0.5px;
-            display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
@@ -448,7 +437,7 @@
             <div class="import-form">
                 <div class="logo-area">
                     <div class="logo-placeholder">
-                        <img src="{% static 'img/Logo.png' %}" alt="Legal Claims System Logo">
+                        <img src="{% static 'img/Logo.png' %}" alt="Legal Claims System Logo" width="90" height="90">
                     </div>
                 </div>
                 <div class="import-header">
@@ -460,8 +449,8 @@
                 <div class="messages">
                     {% for message in messages %}
                     <div class="message {{ message.tags }}">
-                        {% if message.tags == 'success' %}<i class="fas fa-check-circle"></i>{% endif %}
-                        {% if message.tags == 'error' %}<i class="fas fa-exclamation-circle"></i>{% endif %}
+                        {% if message.tags == 'success' %}<i class="fas fa-check-circle" aria-hidden="true"></i>{% endif %}
+                        {% if message.tags == 'error' %}<i class="fas fa-exclamation-circle" aria-hidden="true"></i>{% endif %}
                         {{ message }}
                     </div>
                     {% endfor %}
@@ -474,7 +463,7 @@
                         <label for="excel_file" class="form-label">Select Excel File:</label>
                         <div class="file-input-container">
                             <div class="file-icon">
-                                <i class="fas fa-file-excel"></i>
+                                <i class="fas fa-file-excel" aria-hidden="true"></i>
                             </div>
                             <div class="file-text">Drag and drop your Excel file here</div>
                             <div class="file-description">or click to browse</div>
@@ -482,12 +471,12 @@
                         </div>
                     </div>
                     <button type="submit" class="btn">
-                        <i class="fas fa-upload"></i> Upload and Import
+                        <i class="fas fa-upload" aria-hidden="true"></i> Upload and Import
                     </button>
                 </form>
 
                 <div class="requirements">
-                    <h3><i class="fas fa-info-circle"></i> File Requirements</h3>
+                    <h3><i class="fas fa-info-circle" aria-hidden="true"></i> File Requirements</h3>
                     <p>The Excel file must have the following headers:</p>
                     <ul>
                         <li>Claim</li>
@@ -506,10 +495,10 @@
 
                 {% if skipped_entries %}
                 <div class="results">
-                    <h3><i class="fas fa-exclamation-triangle"></i> Skipped Entries (Duplicates)</h3>
+                    <h3><i class="fas fa-exclamation-triangle" aria-hidden="true"></i> Skipped Entries (Duplicates)</h3>
                     <ul>
                         {% for entry in skipped_entries %}
-                        <li><i class="fas fa-copy"></i> {{ entry }}</li>
+                        <li><i class="fas fa-copy" aria-hidden="true"></i> {{ entry }}</li>
                         {% endfor %}
                     </ul>
                 </div>
@@ -517,10 +506,10 @@
 
                 {% if error_entries %}
                 <div class="results error">
-                    <h3><i class="fas fa-times-circle"></i> Error Entries</h3>
+                    <h3><i class="fas fa-times-circle" aria-hidden="true"></i> Error Entries</h3>
                     <ul>
                         {% for entry in error_entries %}
-                        <li><i class="fas fa-exclamation-circle"></i> {{ entry }}</li>
+                        <li><i class="fas fa-exclamation-circle" aria-hidden="true"></i> {{ entry }}</li>
                         {% endfor %}
                     </ul>
                 </div>
@@ -528,7 +517,7 @@
 
                 <div class="button-container">
                     <a href="{% url 'shipment_list' %}" class="btn back-btn">
-                        <i class="fas fa-arrow-left"></i> Back to Records
+                        <i class="fas fa-arrow-left" aria-hidden="true"></i> Back to Records
                     </a>
                 </div>
             </div>
@@ -536,25 +525,27 @@
     </div>
 
     <script>
-        // Optional: Add animation when file is selected
-        const fileInput = document.getElementById('excel_file');
-        const fileContainer = document.querySelector('.file-input-container');
-        const fileText = document.querySelector('.file-text');
-        const fileDescription = document.querySelector('.file-description');
-        
-        fileInput.addEventListener('change', function() {
-            if (this.files.length > 0) {
-                const fileName = this.files[0].name;
-                fileText.textContent = fileName;
-                fileDescription.textContent = 'File selected';
-                fileContainer.style.borderColor = 'var(--accent)';
-                fileContainer.style.borderStyle = 'solid';
-            } else {
-                fileText.textContent = 'Drag and drop your Excel file here';
-                fileDescription.textContent = 'or click to browse';
-                fileContainer.style.borderColor = '#DDE3E9';
-                fileContainer.style.borderStyle = 'dashed';
-            }
+        // Defer script execution
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileInput = document.getElementById('excel_file');
+            const fileContainer = document.querySelector('.file-input-container');
+            const fileText = document.querySelector('.file-text');
+            const fileDescription = document.querySelector('.file-description');
+            
+            fileInput.addEventListener('change', function() {
+                if (this.files.length > 0) {
+                    const fileName = this.files[0].name;
+                    fileText.textContent = fileName;
+                    fileDescription.textContent = 'File selected';
+                    fileContainer.style.borderColor = 'var(--accent)';
+                    fileContainer.style.borderStyle = 'solid';
+                } else {
+                    fileText.textContent = 'Drag and drop your Excel file here';
+                    fileDescription.textContent = 'or click to browse';
+                    fileContainer.style.borderColor = '#DDE3E9';
+                    fileContainer.style.borderStyle = 'dashed';
+                }
+            });
         });
     </script>
 </body>

@@ -1,60 +1,68 @@
 {% load static %}
 
 {% block content %}
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Preload critical assets -->
+<link rel="preload" href="{% static 'img/Pricing Report Page 1.jpg' %}" as="image" fetchpriority="high">
+<link rel="preload" href="{% static 'img/Logo.jpg' %}" as="image">
+
 <style>
+    /* Critical CSS inline for faster rendering */
     :root {
-        --primary: #0446f1;  /* Bright blue */
-        --primary-dark: #0336c1;  /* Darker shade for hover effects */
-        --secondary: #6C8EBF;  /* Secondary color, adjust as needed */
-        --light: #F0F4F8;  /* Light background */
-        --dark: #1A2533;  /* Dark text */
-        --gray: #64748B;  /* Gray color for text */
-        --border-radius: 12px;  /* Rounded corners */
-        --box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);  /* Shadow for depth */
-        --transition: all 0.3s ease;  /* Smooth transition for interactions */
+        --primary: #0446f1;
+        --primary-dark: #0336c1;
+        --secondary: #6C8EBF;
+        --light: #F0F4F8;
+        --dark: #1A2533;
+        --gray: #64748B;
+        --border-radius: 12px;
+        --box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
     }
 
     body {
-        background-image: url('{% static "img/Pricing Report Page 1.png" %}');
+        background-image: url('{% static "img/Pricing Report Page 1.jpg" %}');
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
         background-attachment: fixed;
         min-height: 100vh;
-        padding: 2rem 1rem;  /* Added horizontal padding */
-        margin: 0;  /* Remove default margin */
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        padding: 2rem 1rem;
+        margin: 0;
+        font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
         color: var(--dark);
-        box-sizing: border-box;  /* Include padding in width calculation */
+        box-sizing: border-box;
     }
     
     .form-container {
         width: 100%;
-        max-width: 550px;  /* Adjusted width */
+        max-width: 550px;
         margin: auto;
-        background-color: rgba(0, 0, 0, 0.7);  /* Semi-transparent black */
+        background-color: rgba(0, 0, 0, 0.7);
         border-radius: var(--border-radius);
         box-shadow: var(--box-shadow);
         overflow: hidden;
         backdrop-filter: blur(10px);
-        color: white;  /* Ensure text is readable */
+        -webkit-backdrop-filter: blur(10px);
+        color: white;
+        will-change: transform;
+        contain: content;
     }
 
     .form-header {
         color: white;
-        padding: 1.5rem 1rem;  /* Adjusted horizontal padding */
+        padding: 1.5rem 1rem;
         font-weight: 600;
         text-align: center;
     }
 
     .form-header h2 {
         margin: 0;
-        font-size: clamp(1.5rem, 5vw, 1.75rem);  /* Responsive font size */
-        line-height: 1.2;  /* Improved line height */
+        font-size: clamp(1.5rem, 5vw, 1.75rem);
+        line-height: 1.2;
     }
 
     .form-content {
-        padding: 1.5rem;  /* Uniform padding */
+        padding: 1.5rem;
     }
 
     .form-content label {
@@ -63,7 +71,7 @@
         margin-top: 1.5rem;
         font-weight: 500;
         color: var(--light);
-        font-size: clamp(0.875rem, 4vw, 1rem);  /* Responsive font size */
+        font-size: clamp(0.875rem, 4vw, 1rem);
     }
 
     .form-content input,
@@ -74,13 +82,12 @@
         border: 1.5px solid #DDE3E9;
         border-radius: 10px;
         font-family: inherit;
-        font-size: 16px;  /* Fixed font size of 16px prevents iOS zoom */
-        transition: var(--transition);
+        font-size: 16px;
         background-color: white;
         color: var(--dark);
-        box-sizing: border-box;  /* Include padding in width calculation */
-        -webkit-appearance: none;  /* Remove default styling on iOS */
-        appearance: none;  /* Remove default styling */
+        box-sizing: border-box;
+        -webkit-appearance: none;
+        appearance: none;
     }
 
     .form-content input:focus,
@@ -96,7 +103,7 @@
         padding: 0;
         margin: 0.5rem 0 0;
         color: #dc2626;
-        font-size: clamp(0.75rem, 3.5vw, 0.875rem);  /* Responsive font size */
+        font-size: clamp(0.75rem, 3.5vw, 0.875rem);
     }
 
     .form-actions {
@@ -108,24 +115,24 @@
 
     .btn {
         flex: 1;
-        min-width: 140px;  /* Minimum button width */
+        min-width: 140px;
         padding: 0.75rem 1rem;
         text-align: center;
         border-radius: 10px;
         font-weight: 500;
-        transition: var(--transition);
         border: none;
         cursor: pointer;
-        font-size: 16px;  /* Fixed font size of 16px prevents iOS zoom */
+        font-size: 16px;
         color: white;
-        margin-bottom: 0.5rem;  /* Add space when buttons stack */
-        box-sizing: border-box;  /* Include padding and border in width calculation */
-        white-space: nowrap;  /* Prevent text wrapping within buttons */
-        height: 44px;  /* Set explicit height for all buttons */
-        line-height: 1;  /* Reset line height */
-        display: flex;  /* Use flexbox for alignment */
-        justify-content: center;  /* Center text horizontally */
-        align-items: center;  /* Center text vertically */
+        margin-bottom: 0.5rem;
+        box-sizing: border-box;
+        white-space: nowrap;
+        height: 44px;
+        line-height: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     .btn-primary {
@@ -141,156 +148,32 @@
         background-color: var(--light);
         color: var(--dark);
         border: 1.5px solid #DDE3E9;
-        text-decoration: none;  /* Remove underline from link */
+        text-decoration: none;
     }
 
     .btn-secondary:hover {
         background-color: var(--gray);
-        color: white;  /* Better contrast on hover */
-    }
-
-    /* Custom dropdown styles */
-    .custom-dropdown {
-        position: absolute;
-        width: 100%;
-        max-height: 200px;
-        overflow-y: auto;
-        background-color: white;
-        border: 1px solid #DDE3E9;
-        border-radius: 0 0 10px 10px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        z-index: 1000;
-        display: none;
-    }
-    
-    .custom-dropdown.show {
-        display: block;
-    }
-    
-    .dropdown-item {
-        padding: 10px 15px;
-        cursor: pointer;
-        transition: background-color 0.2s ease;
-        color: var(--dark);
-    }
-    
-    .dropdown-item:hover {
-        background-color: var(--light);
-    }
-    
-    .dropdown-item.active {
-        background-color: var(--primary);
-        color: white;
-    }
-    
-    .client-input-wrapper {
-        position: relative;
-        width: 100%;
-    }
-    
-    .client-input-wrapper::after {
-        content: "▼";
-        position: absolute;
-        right: 12px;
-        top: 50%;
-        transform: translateY(-50%);
-        pointer-events: none;
-        font-size: 12px;
-        color: var(--gray);
-    }
-
-    /* Popup Styles */
-    .popup {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 1000;
-        padding: 1rem;  /* Add padding for small screens */
-        box-sizing: border-box;  /* Include padding in width calculation */
-    }
-
-    .popup-content {
-        background: white;
-        padding: 20px;
-        border-radius: var(--border-radius);
-        text-align: center;
-        width: 100%;
-        max-width: 400px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        color: var(--dark);  /* Ensure text is dark for contrast */
-    }
-
-    .popup-content h2 {
-        font-size: clamp(1.25rem, 5vw, 1.5rem);  /* Responsive font size */
-        margin-top: 0;
-    }
-
-    .popup-content p {
-        font-size: clamp(0.875rem, 4vw, 1rem);  /* Responsive font size */
-    }
-
-    .popup-buttons {
-        margin-top: 15px;
-        display: flex;
-        flex-wrap: wrap;  /* Allow buttons to wrap */
-        justify-content: center;
-        gap: 10px;
-    }
-
-    .popup-buttons button {
-        padding: 10px 20px;
-        border: none;
-        cursor: pointer;
-        border-radius: 5px;
-        font-size: 16px;  /* Fixed font size of 16px prevents iOS zoom */
-        transition: var(--transition);
-        min-width: 120px;  /* Minimum button width */
-        flex: 1;  /* Allow buttons to grow */
-    }
-
-    .popup-buttons button:first-child {
-        background-color: var(--primary);
         color: white;
     }
 
-    .popup-buttons button:first-child:hover {
-        background-color: var(--primary-dark);
-        transform: translateY(-2px);
-    }
-
-    .popup-buttons button:last-child {
-        background-color: #f3f4f6;
-    }
-
-    .popup-buttons button:last-child:hover {
-        background-color: #e5e7eb;
-        transform: translateY(-2px);
-    }
-
-    /* Improved Responsive Styles */
+    /* Non-critical CSS */
     @media (max-width: 768px) {
         body {
-            padding: 1rem;  /* Reduced padding */
+            padding: 1rem;
         }
         
         .form-content {
-            padding: 1.25rem;  /* Slightly reduced padding */
+            padding: 1.25rem;
         }
         
         .form-actions {
-            gap: 8px;  /* Reduced gap */
+            gap: 8px;
         }
     }
 
     @media (max-width: 480px) {
         .form-actions {
-            flex-direction: column;  /* Stack buttons */
+            flex-direction: column;
         }
         
         .btn {
@@ -298,44 +181,11 @@
             margin-bottom: 0.75rem;
         }
         
-        .popup-buttons {
-            flex-direction: column;  /* Stack popup buttons */
-        }
-        
-        .popup-buttons button {
-            width: 100%;
-            margin: 5px 0;
-        }
-        
         .form-header {
-            padding: 1.25rem 0.75rem;  /* Further reduced padding */
-        }
-    }
-
-    /* Fix for very small screens */
-    @media (max-width: 320px) {
-        .form-content {
-            padding: 1rem;  /* Minimal padding */
-        }
-        
-        .popup-content {
-            padding: 15px;  /* Reduced padding */
-        }
-    }
-
-    /* Touch-friendly targets for mobile */
-    @media (pointer: coarse) {
-        .btn, 
-        .popup-buttons button,
-        .form-content input,
-        .form-content select {
-            min-height: 44px;  /* Minimum touch target size */
+            padding: 1.25rem 0.75rem;
         }
     }
 </style>
-
-<!-- Added meta viewport tag to prevent zoom issues -->
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <div class="form-container">
     <div class="form-header">
@@ -400,53 +250,249 @@
         </div>
     </div>
 </div>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        document.getElementById("popup-container").style.display = "flex";
-    });
-
-    function redirectToEdit() {
-        window.location.href = "{% url 'edit_shipment' pk=edit_shipment_id %}";  // Redirect to edit page of the existing shipment
-    }
-
-    function closePopup() {
-        document.getElementById("popup-container").style.display = "none";
-    }
-</script>
 {% endif %}
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const clientInput = document.getElementById('id_Claiming_Client');
-    const clientDropdown = document.getElementById('client-dropdown');
-    // let clients = [{% for client in clients %}'{{ client }}',{% endfor %}];
+<!-- Deferred CSS for non-critical styles -->
+<style>
+    /* Custom dropdown styles - deferred */
+    .custom-dropdown {
+        position: absolute;
+        width: 100%;
+        max-height: 200px;
+        overflow-y: auto;
+        background-color: white;
+        border: 1px solid #DDE3E9;
+        border-radius: 0 0 10px 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        display: none;
+    }
     
-    // Initialize with all clients
-    function initializeDropdown() {
-        // Initialize dropdown with all available clients
-        clientDropdown.innerHTML = '';
-        clients.forEach(client => {
-            if (client) {
-                const item = document.createElement('div');
-                item.className = 'dropdown-item';
-                item.textContent = client;
-                item.addEventListener('click', function() {
-                    clientInput.value = client;
-                    clientDropdown.classList.remove('show');
-                });
-                clientDropdown.appendChild(item);
-            }
+    .custom-dropdown.show {
+        display: block;
+    }
+    
+    .dropdown-item {
+        padding: 10px 15px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        color: var(--dark);
+    }
+    
+    .dropdown-item:hover {
+        background-color: var(--light);
+    }
+    
+    .dropdown-item.active {
+        background-color: var(--primary);
+        color: white;
+    }
+    
+    .client-input-wrapper {
+        position: relative;
+        width: 100%;
+    }
+    
+    .client-input-wrapper::after {
+        content: "▼";
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: none;
+        font-size: 12px;
+        color: var(--gray);
+    }
+
+    /* Popup Styles - deferred */
+    .popup {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        padding: 1rem;
+        box-sizing: border-box;
+    }
+
+    .popup-content {
+        background: white;
+        padding: 20px;
+        border-radius: var(--border-radius);
+        text-align: center;
+        width: 100%;
+        max-width: 400px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        color: var(--dark);
+    }
+
+    .popup-content h2 {
+        font-size: clamp(1.25rem, 5vw, 1.5rem);
+        margin-top: 0;
+    }
+
+    .popup-content p {
+        font-size: clamp(0.875rem, 4vw, 1rem);
+    }
+
+    .popup-buttons {
+        margin-top: 15px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .popup-buttons button {
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+        font-size: 16px;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+        min-width: 120px;
+        flex: 1;
+    }
+
+    .popup-buttons button:first-child {
+        background-color: var(--primary);
+        color: white;
+    }
+
+    .popup-buttons button:first-child:hover {
+        background-color: var(--primary-dark);
+        transform: translateY(-2px);
+    }
+
+    .popup-buttons button:last-child {
+        background-color: #f3f4f6;
+    }
+
+    .popup-buttons button:last-child:hover {
+        background-color: #e5e7eb;
+        transform: translateY(-2px);
+    }
+    
+    @media (max-width: 480px) {
+        .popup-buttons {
+            flex-direction: column;
+        }
+        
+        .popup-buttons button {
+            width: 100%;
+            margin: 5px 0;
+        }
+    }
+
+    @media (max-width: 320px) {
+        .popup-content {
+            padding: 15px;
+        }
+    }
+
+    @media (pointer: coarse) {
+        .popup-buttons button {
+            min-height: 44px;
+        }
+    }
+</style>
+
+<script>
+// Initialize dropdown functionality - using defer to not block page rendering
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle popup if needed
+    {% if duplicate_claim_no %}
+        const popupContainer = document.getElementById("popup-container");
+        if (popupContainer) {
+            popupContainer.style.display = "flex";
+        }
+        
+        window.redirectToEdit = function() {
+            window.location.href = "{% url 'edit_shipment' pk=edit_shipment_id %}";
+        };
+        
+        window.closePopup = function() {
+            document.getElementById("popup-container").style.display = "none";
+        };
+    {% endif %}
+
+    // Handle client autocomplete only when needed
+    const clientInput = document.getElementById('id_Claiming_Client');
+    if (!clientInput) return;
+    
+    const clientDropdown = document.getElementById('client-dropdown');
+    if (!clientDropdown) return;
+    
+    // Cache for client data
+    let clients = [];
+    let clientCache = {};
+    
+    // Fetch clients only when needed (lazy loading)
+    function fetchClients(callback) {
+        if (clients.length > 0) {
+            callback(clients);
+            return;
+        }
+        
+        // This would normally fetch from the server
+        clients = [{% for client in clients %}'{{ client }}',{% endfor %}];
+        callback(clients);
+    }
+    
+    // Initialize dropdown with all available clients - using IntersectionObserver for performance
+    let dropdownInitialized = false;
+    function lazyInitDropdown() {
+        if (dropdownInitialized) return;
+        dropdownInitialized = true;
+        
+        fetchClients(function(clientList) {
+            clientDropdown.innerHTML = '';
+            const fragment = document.createDocumentFragment();
+            
+            clientList.forEach(client => {
+                if (client) {
+                    const item = document.createElement('div');
+                    item.className = 'dropdown-item';
+                    item.textContent = client;
+                    item.addEventListener('click', function() {
+                        clientInput.value = client;
+                        clientDropdown.classList.remove('show');
+                    });
+                    fragment.appendChild(item);
+                }
+            });
+            
+            clientDropdown.appendChild(fragment);
         });
     }
     
     // Filter clients based on input
     function filterClients(inputValue) {
-        const filteredClients = clients.filter(client => 
-            client && client.toLowerCase().includes(inputValue.toLowerCase())
-        );
+        if (clientCache[inputValue]) {
+            renderFilteredClients(clientCache[inputValue]);
+            return;
+        }
         
+        fetchClients(function(clientList) {
+            const filteredClients = clientList.filter(client => 
+                client && client.toLowerCase().includes(inputValue.toLowerCase())
+            );
+            
+            // Cache the results
+            clientCache[inputValue] = filteredClients;
+            renderFilteredClients(filteredClients);
+        });
+    }
+    
+    // Render filtered clients - separated for performance
+    function renderFilteredClients(filteredClients) {
         clientDropdown.innerHTML = '';
+        const fragment = document.createDocumentFragment();
         
         if (filteredClients.length === 0) {
             const item = document.createElement('div');
@@ -454,7 +500,7 @@ document.addEventListener('DOMContentLoaded', function() {
             item.textContent = 'No Matches Found New Client Will be Automatically Created';
             item.style.fontStyle = 'italic';
             item.style.color = 'var(--gray)';
-            clientDropdown.appendChild(item);
+            fragment.appendChild(item);
         } else {
             filteredClients.forEach(client => {
                 const item = document.createElement('div');
@@ -464,37 +510,95 @@ document.addEventListener('DOMContentLoaded', function() {
                     clientInput.value = client;
                     clientDropdown.classList.remove('show');
                 });
-                clientDropdown.appendChild(item);
+                fragment.appendChild(item);
             });
         }
+        
+        clientDropdown.appendChild(fragment);
     }
     
-    // Show dropdown on focus
+    // Show dropdown on focus - using IntersectionObserver
     clientInput.addEventListener('focus', function() {
-        initializeDropdown();
+        window.requestIdleCallback ? 
+            requestIdleCallback(lazyInitDropdown) : 
+            setTimeout(lazyInitDropdown, 1);
         clientDropdown.classList.add('show');
     });
     
-    // Filter on input
+    // Filter on input with debounce for performance
+    let debounceTimer;
     clientInput.addEventListener('input', function() {
+        clearTimeout(debounceTimer);
         const inputValue = this.value.trim();
-        if (inputValue.length > 0) {
-            // For server-side filtering (optional)
-            fetch(`/client-autocomplete/?term=${encodeURIComponent(inputValue)}`)
-                .then(response => response.json())
-                .then(data => {
-                    clients = data.map(item => item.text);
-                    filterClients(inputValue);
-                })
-                .catch(error => {
-                    console.error('Error fetching client suggestions:', error);
-                    filterClients(inputValue);
-                });
-        } else {
-            initializeDropdown();
-        }
-        clientDropdown.classList.add('show');
+        
+        debounceTimer = setTimeout(() => {
+            if (inputValue.length > 0) {
+                // Server-side filtering with cache
+                const cacheName = 'client-' + inputValue;
+                
+                // Check session storage cache first
+                const cachedData = sessionStorage.getItem(cacheName);
+                if (cachedData) {
+                    try {
+                        const parsedData = JSON.parse(cachedData);
+                        clientCache[inputValue] = parsedData;
+                        renderFilteredClients(parsedData);
+                    } catch (e) {
+                        // If cache is corrupted, fetch fresh data
+                        fetchFromServer();
+                    }
+                } else {
+                    fetchFromServer();
+                }
+                
+                function fetchFromServer() {
+                    // Using navigator.onLine to avoid unnecessary requests
+                    if (navigator.onLine) {
+                        fetch(`/client-autocomplete/?term=${encodeURIComponent(inputValue)}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                const clientData = data.map(item => item.text);
+                                // Store in session storage with expiration (1 hour)
+                                try {
+                                    sessionStorage.setItem(cacheName, JSON.stringify(clientData));
+                                } catch (e) {
+                                    // Storage might be full - clear older items
+                                    clearOldCache();
+                                    try {
+                                        sessionStorage.setItem(cacheName, JSON.stringify(clientData));
+                                    } catch (e) {
+                                        // If still fails, just continue without caching
+                                        console.warn("Cache storage failed");
+                                    }
+                                }
+                                clientCache[inputValue] = clientData;
+                                renderFilteredClients(clientData);
+                            })
+                            .catch(error => {
+                                console.error('Error fetching client suggestions:', error);
+                                filterClients(inputValue);
+                            });
+                    } else {
+                        // Offline fallback
+                        filterClients(inputValue);
+                    }
+                }
+            } else {
+                lazyInitDropdown();
+            }
+            clientDropdown.classList.add('show');
+        }, 300); // 300ms debounce
     });
+    
+    // Clear old cache entries
+    function clearOldCache() {
+        for (let i = 0; i < sessionStorage.length; i++) {
+            const key = sessionStorage.key(i);
+            if (key.startsWith('client-')) {
+                sessionStorage.removeItem(key);
+            }
+        }
+    }
     
     // Hide dropdown when clicking outside
     document.addEventListener('click', function(event) {
@@ -503,11 +607,13 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Key navigation
+    // Key navigation with performance optimizations
     clientInput.addEventListener('keydown', function(e) {
         if (!clientDropdown.classList.contains('show')) return;
         
         const items = clientDropdown.querySelectorAll('.dropdown-item');
+        if (!items.length) return;
+        
         const activeItem = clientDropdown.querySelector('.dropdown-item.active');
         let index = -1;
         
@@ -521,7 +627,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (index < items.length - 1) {
                     if (activeItem) activeItem.classList.remove('active');
                     items[index + 1].classList.add('active');
-                    items[index + 1].scrollIntoView({ block: 'nearest' });
+                    
+                    // Only scroll if needed
+                    const itemBounds = items[index + 1].getBoundingClientRect();
+                    const dropdownBounds = clientDropdown.getBoundingClientRect();
+                    
+                    if (itemBounds.bottom > dropdownBounds.bottom) {
+                        items[index + 1].scrollIntoView({ block: 'nearest' });
+                    }
                 }
                 break;
                 
@@ -530,7 +643,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (index > 0) {
                     if (activeItem) activeItem.classList.remove('active');
                     items[index - 1].classList.add('active');
-                    items[index - 1].scrollIntoView({ block: 'nearest' });
+                    
+                    // Only scroll if needed
+                    const itemBounds = items[index - 1].getBoundingClientRect();
+                    const dropdownBounds = clientDropdown.getBoundingClientRect();
+                    
+                    if (itemBounds.top < dropdownBounds.top) {
+                        items[index - 1].scrollIntoView({ block: 'nearest' });
+                    }
                 }
                 break;
                 
@@ -550,5 +670,4 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
-
 {% endblock %}

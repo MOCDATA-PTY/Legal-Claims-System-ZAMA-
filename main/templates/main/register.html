@@ -1,185 +1,305 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Anime Registration</title>
-  <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      background-color: #f9f0ff;
-      background-image: url('/api/placeholder/1200/800');
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
-    
-    .container {
-      max-width: 500px;
-      width: 90%;
-      padding: 30px;
-      box-shadow: 0 10px 30px rgba(133, 76, 230, 0.3);
-      border-radius: 15px;
-      background-color: rgba(255, 255, 255, 0.9);
-      backdrop-filter: blur(5px);
-      border: 2px solid #d8b6ff;
-    }
-    
-    h2 {
-      text-align: center;
-      color: #6a3093;
-      font-size: 32px;
-      margin-bottom: 25px;
-      font-weight: bold;
-      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-    }
-    
-    .form-group {
-      margin-bottom: 20px;
-    }
-    
-    label {
-      display: block;
-      margin-bottom: 5px;
-      color: #6a3093;
-      font-weight: bold;
-    }
-    
-    input, select, textarea {
-      width: 100%;
-      padding: 12px;
-      border: 2px solid #d8b6ff;
-      border-radius: 10px;
-      background-color: rgba(255, 255, 255, 0.8);
-      font-size: 16px;
-      transition: border-color 0.3s, box-shadow 0.3s;
-      box-sizing: border-box;
-    }
-    
-    input:focus, select:focus, textarea:focus {
-      outline: none;
-      border-color: #9b59b6;
-      box-shadow: 0 0 8px rgba(155, 89, 182, 0.5);
-    }
-    
-    button {
-      background: linear-gradient(135deg, #9b59b6, #6a3093);
-      color: white;
-      border: none;
-      padding: 14px 30px;
-      font-size: 18px;
-      border-radius: 50px;
-      cursor: pointer;
-      width: 100%;
-      transition: transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 4px 10px rgba(106, 48, 147, 0.3);
-      font-weight: bold;
-      margin-top: 10px;
-    }
-    
-    button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 7px 15px rgba(106, 48, 147, 0.4);
-    }
-    
-    button:active {
-      transform: translateY(1px);
-    }
-    
-    .helptext {
-      font-size: 14px;
-      color: #8e44ad;
-      margin-top: 5px;
-      display: block;
-    }
-    
-    .errorlist {
-      color: #e74c3c;
-      padding-left: 20px;
-      margin: 5px 0;
-    }
-    
-    .anime-decoration {
-      position: absolute;
-      width: 100px;
-      height: 100px;
-      background-size: contain;
-      background-repeat: no-repeat;
-      z-index: -1;
-    }
-    
-    .anime-decoration.top-left {
-      top: 20px;
-      left: 20px;
-      background-image: url('/api/placeholder/100/100');
-      transform: rotate(-15deg);
-    }
-    
-    .anime-decoration.bottom-right {
-      bottom: 20px;
-      right: 20px;
-      background-image: url('/api/placeholder/100/100');
-      transform: rotate(15deg);
-    }
-    
-    @media (max-width: 600px) {
-      .container {
-        padding: 20px;
-      }
-      
-      .anime-decoration {
-        width: 60px;
-        height: 60px;
-      }
-    }
-  </style>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Legal Claims System registration page">
+    <title>Register - Legal Claims System</title>
+    <!-- Preload critical assets -->
+    <link rel="preload" href="{% static 'img/Logo.png' %}" as="image" fetchpriority="high">
+    <link rel="preload" href="{% static 'img/Pricing Report Page 1.jpg' %}" as="image" fetchpriority="high">
+    <!-- Critical CSS -->
+    <style>
+        :root {
+            --primary: #3B4A67;
+            --primary-hover: #4D5F85;
+            --light: #F0F4F8;
+            --dark: #1A2533;
+            --gray: #64748b;
+            --gray-light: #e5e7eb;
+            --error: #dc2626;
+            --radius: 6px;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --transition: all 0.2s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: url("{% static 'img/Pricing Report Page 1.jpg' %}") no-repeat center center;
+            background-size: cover;
+            padding: 1.5rem;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 450px;
+            background-color: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--primary-hover));
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.75rem;
+        }
+
+        .logo {
+            height: 60px;
+            width: auto;
+            margin-right: 12px;
+        }
+
+        .company {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        h2 {
+            text-align: center;
+            color: var(--dark);
+            margin-bottom: 1.75rem;
+            font-size: 1.5rem;
+            font-weight: 500;
+            letter-spacing: -0.01em;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group:last-of-type {
+            margin-bottom: 2rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            border: 1px solid var(--gray-light);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(59, 74, 103, 0.1);
+        }
+
+        .helptext {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-top: 0.5rem;
+        }
+
+        .button {
+            display: block;
+            width: 100%;
+            padding: 0.9rem 1rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .button:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 74, 103, 0.15);
+        }
+
+        .button:active {
+            transform: translateY(0);
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .login-link a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            background-color: rgba(220, 38, 38, 0.1);
+            color: var(--error);
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius);
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .error-message.active {
+            display: block;
+        }
+
+        @media (max-width: 520px) {
+            .container {
+                padding: 2rem 1.5rem;
+            }
+            
+            body {
+                padding: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="anime-decoration top-left"></div>
-  <div class="anime-decoration bottom-right"></div>
-  
-  <div class="container">
-    <h2>Join Our Anime World</h2>
-    
-    <form method="post">
-      {% csrf_token %}
-      
-      <div class="form-group">
-        <label for="id_username">Username</label>
-        <input type="text" name="username" id="id_username" maxlength="150" required>
-        <span class="helptext">Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</span>
-      </div>
-      
-      <div class="form-group">
-        <label for="id_email">Email</label>
-        <input type="email" name="email" id="id_email" required>
-      </div>
-      
-      <div class="form-group">
-        <label for="id_password1">Password</label>
-        <input type="password" name="password1" id="id_password1" required>
-        <span class="helptext">Your password must be at least 8 characters long.</span>
-      </div>
-      
-      <div class="form-group">
-        <label for="id_password2">Confirm Password</label>
-        <input type="password" name="password2" id="id_password2" required>
-        <span class="helptext">Enter the same password as before, for verification.</span>
-      </div>
-      
-      <div class="form-group">
-        <label for="id_favorite_anime">Favorite Anime (Optional)</label>
-        <input type="text" name="favorite_anime" id="id_favorite_anime">
-      </div>
-      
-      <button type="submit">Begin Your Adventure</button>
-    </form>
-  </div>
+    <div class="container">
+        <div class="logo-area">
+            <img src="{% static 'img/Logo.png' %}" alt="Legal Claims System Logo" class="logo">
+            <div class="company">Legal Claims System</div>
+        </div>
+        
+        <h2>Create your account</h2>
+        
+        <div id="error-container" class="error-message"></div>
+        
+        <form method="post" id="registration-form">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="id_username">Username</label>
+                <input type="text" name="username" id="id_username" maxlength="150" required autocomplete="username">
+                <span class="helptext">Letters, digits and @/./+/-/_ only.</span>
+            </div>
+            
+            <div class="form-group">
+                <label for="id_email">Email address</label>
+                <input type="email" name="email" id="id_email" required autocomplete="email">
+            </div>
+            
+            <div class="form-group">
+                <label for="id_password1">Password</label>
+                <input type="password" name="password1" id="id_password1" required autocomplete="new-password">
+                <span class="helptext">Your password must be at least 8 characters long.</span>
+            </div>
+            
+            <div class="form-group">
+                <label for="id_password2">Confirm Password</label>
+                <input type="password" name="password2" id="id_password2" required autocomplete="new-password">
+            </div>
+            
+            <button type="submit" class="button">Create Account</button>
+            
+            <div class="login-link">
+                Already have an account? <a href="{% url 'login' %}">Sign in</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Minimal JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('registration-form');
+            const errorContainer = document.getElementById('error-container');
+            
+            if (form && errorContainer) {
+                form.addEventListener('submit', function(e) {
+                    let hasErrors = false;
+                    let errorMessages = [];
+                    
+                    // Clear previous errors
+                    errorContainer.textContent = '';
+                    errorContainer.classList.remove('active');
+                    
+                    // Validate username
+                    const username = document.getElementById('id_username').value.trim();
+                    if (!/^[\w.@+-]+$/.test(username)) {
+                        errorMessages.push('Username can only contain letters, digits and @/./+/-/_');
+                        hasErrors = true;
+                    }
+                    
+                    // Validate password
+                    const password1 = document.getElementById('id_password1').value;
+                    const password2 = document.getElementById('id_password2').value;
+                    
+                    if (password1.length < 8) {
+                        errorMessages.push('Password must be at least 8 characters long.');
+                        hasErrors = true;
+                    }
+                    
+                    if (password1 !== password2) {
+                        errorMessages.push('Passwords do not match.');
+                        hasErrors = true;
+                    }
+                    
+                    // Display errors if any
+                    if (hasErrors) {
+                        e.preventDefault();
+                        
+                        const errorList = document.createElement('ul');
+                        errorList.style.paddingLeft = '1.5rem';
+                        
+                        errorMessages.forEach(message => {
+                            const listItem = document.createElement('li');
+                            listItem.textContent = message;
+                            errorList.appendChild(listItem);
+                        });
+                        
+                        errorContainer.appendChild(errorList);
+                        errorContainer.classList.add('active');
+                        
+                        // Scroll to errors
+                        errorContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>
